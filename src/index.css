@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  color: #eaeaea;
+  background-color: #090807;
+  font-synthesis: none;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Custom Typography Helpers */
+.font-display {
+  font-family: 'Montserrat', 'Franklin Gothic Medium', sans-serif;
+}
+
+.font-body {
+  font-family: 'Bree Serif', 'Lora', Georgia, serif;
+}
+
+.font-mono-archive {
+  font-family: 'Space Mono', monospace;
+}
+
+/* Custom Cursor */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none !important;
+  }
+  a, button, [role="button"], input, select {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@media (pointer: coarse), (max-width: 1279px) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+.custom-cursor.is-visible {
+  opacity: 1;
+}
+
+.cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.cursor-orbit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, background 0.2s ease;
+}
+
+.custom-cursor.is-enter .cursor-orbit {
+  transform: translate(-50%, -50%) scale(1.25);
+  border-color: #e53935;
+  background: rgba(229, 57, 53, 0.22);
+}
+
+.cursor-label {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  transform: translateX(-50%) translateY(-4px);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  background: rgba(10, 9, 8, 0.85);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-cursor.is-enter .cursor-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Aura for Interactive Objects (as specified in Guión) */
+.aura-item {
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.aura-item::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(234, 234, 234, 0.35) 0%, rgba(201, 183, 156, 0.15) 50%, transparent 75%);
+  opacity: 0.65;
+  pointer-events: none;
+  animation: aura-pulse 3s infinite ease-in-out;
+  transition: opacity 0.3s ease;
+}
+
+.aura-item:hover::after {
+  opacity: 1;
+}
+
+@keyframes aura-pulse {
+  0%, 100% {
+    transform: scale(0.98);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.85;
+  }
+}
+
+/* Basement flickering light */
+@keyframes basement-flicker {
+  0% { opacity: 0.92; }
+  3% { opacity: 0.45; }
+  6% { opacity: 0.88; }
+  7% { opacity: 0.2; }
+  9% { opacity: 0.85; }
+  28% { opacity: 0.85; }
+  29% { opacity: 0.3; }
+  30% { opacity: 0.9; }
+  52% { opacity: 0.95; }
+  53% { opacity: 0.15; }
+  54% { opacity: 0.92; }
+  85% { opacity: 0.95; }
+  86% { opacity: 0.35; }
+  88% { opacity: 0.9; }
+  100% { opacity: 0.92; }
+}
+
+.basement-flickering {
+  animation: basement-flicker 5s infinite;
+}
+
+/* Infinite zoom transition utilities */
+@keyframes zoom-in-infinite {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+    filter: blur(12px);
+  }
+}
+
+@keyframes zoom-out-infinite {
+  0% {
+    transform: scale(2.8);
+    opacity: 0;
+    filter: blur(12px);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.transition-zoom-in {
+  animation: zoom-in-infinite 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.transition-zoom-out {
+  animation: zoom-out-infinite 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+

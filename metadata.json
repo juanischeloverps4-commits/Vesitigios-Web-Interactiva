@@ -1,0 +1,6 @@
+{
+  "name": "VESTIGIOS — La Casa por la Memoria",
+  "description": "Experiencia narrativa transmedia y archivo interactivo de la Casa por la Memoria de Resistencia, Chaco. Memoria, Verdad y Justicia frente a los discursos negacionistas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

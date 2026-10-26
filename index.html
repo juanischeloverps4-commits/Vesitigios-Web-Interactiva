@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VESTIGIOS — La Casa por la Memoria</title>
+    <meta name="description" content="Experiencia narrativa transmedia y archivo interactivo de la Casa por la Memoria de Resistencia, Chaco. Memoria, Verdad y Justicia frente al negacionismo." />
+    <meta property="og:title" content="VESTIGIOS — La Casa por la Memoria" />
+    <meta property="og:description" content="Experiencia narrativa transmedia y archivo interactivo de la Casa por la Memoria de Resistencia, Chaco." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        function enableFetchSetter(target) {
+          if (!target) return;
+          try {
+            var desc = Object.getOwnPropertyDescriptor(target, 'fetch');
+            var origFetch = (desc && desc.value) || target.fetch || (typeof window !== 'undefined' ? window.fetch : null);
+            var current = origFetch;
+            try {
+              Object.defineProperty(target, 'fetch', {
+                get: function() { return current; },
+                set: function(val) { current = val; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (e1) {
+              try {
+                Object.defineProperty(target, 'fetch', {
+                  value: origFetch,
+                  writable: true,
+                  configurable: true,
+                  enumerable: true
+                });
+              } catch (e2) {}
+            }
+          } catch (e) {}
+        }
+
+        enableFetchSetter(window);
+        if (typeof Window !== 'undefined' && Window.prototype) {
+          enableFetchSetter(Window.prototype);
+        }
+        if (typeof globalThis !== 'undefined') {
+          enableFetchSetter(globalThis);
+        }
+
+        var prevOnError = window.onerror;
+        window.onerror = function(msg, url, line, col, err) {
+          var str = String(msg || '') + ' ' + String(url || '') + ' ' + (err && err.stack ? String(err.stack) : '');
+          if (
+            str.indexOf('chrome-extension://') !== -1 ||
+            str.indexOf('Cannot set property fetch') !== -1 ||
+            str.indexOf('only a getter') !== -1 ||
+            str.indexOf('requests.js') !== -1 ||
+            str.indexOf('200.js') !== -1
+          ) {
+            return true;
+          }
+          if (typeof prevOnError === 'function') {
+            return prevOnError.apply(this, arguments);
+          }
+          return false;
+        };
+
+        window.addEventListener('error', function(event) {
+          var errStr = String(event.message || '') + ' ' + String(event.filename || '') + ' ' + (event.error && event.error.stack ? String(event.error.stack) : '');
+          if (
+            errStr.indexOf('chrome-extension://') !== -1 ||
+            errStr.indexOf('Cannot set property fetch') !== -1 ||
+            errStr.indexOf('only a getter') !== -1 ||
+            errStr.indexOf('requests.js') !== -1 ||
+            errStr.indexOf('200.js') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && event.reason;
+          var reasonStr = String((reason && (reason.message || reason.stack)) || reason || '');
+          if (
+            reasonStr.indexOf('chrome-extension://') !== -1 ||
+            reasonStr.indexOf('Cannot set property fetch') !== -1 ||
+            reasonStr.indexOf('only a getter') !== -1 ||
+            reasonStr.indexOf('requests.js') !== -1 ||
+            reasonStr.indexOf('200.js') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,300..900;1,300..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#090807] text-[#eaeaea] antialiased selection:bg-[#7a1e1e] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
