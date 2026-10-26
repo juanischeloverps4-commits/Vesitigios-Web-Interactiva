@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VICTIM_FACES, REFLEXIVE_QUOTES } from '../data/vestigiosData';
 import { VictimFace } from '../types';
-import { Instagram, Share2, AlertTriangle, Clock, MapPin, ExternalLink, ChevronDown } from 'lucide-react';
+import { Instagram, Share2, AlertTriangle, Clock, MapPin, ExternalLink, ChevronDown, Send, CheckCircle2, MessageSquare, Loader2 } from 'lucide-react';
 import { VestigiosLogo } from './VestigiosLogo';
+
+// =========================================================================
+// CONFIGURACIÓN DEL FORMULARIO DE FEEDBACK
+// Pegá aquí la URL de tu endpoint de Web3Forms, Google Apps Script o Formspree:
+// =========================================================================
+export const FEEDBACK_API_URL = "URL_DE_TU_API_AQUI";
 
 interface MuralSceneProps {
   onHoverInteractive: (label: string, isEntering: boolean) => void;
@@ -13,6 +19,9 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [copiedLink, setCopiedLink] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [feedbackComment, setFeedbackComment] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [feedbackErrorMsg, setFeedbackErrorMsg] = useState<string | null>(null);
   const detailCardRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to detail card when a victim face is selected
@@ -67,6 +76,51 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
     navigator.clipboard?.writeText(window.location.href);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
+  };
+
+  const handleFeedbackSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!feedbackComment.trim() || feedbackStatus === 'sending') return;
+
+    setFeedbackStatus('sending');
+    setFeedbackErrorMsg(null);
+
+    try {
+      if (FEEDBACK_API_URL === "URL_DE_TU_API_AQUI") {
+        // Simulación visual en desarrollo/preview si todavía no se reemplazó la URL del servicio
+        console.info(
+          "Feedback enviado en modo de prueba local. Para recibirlo en tu correo o Google Sheets, colocá tu webhook en FEEDBACK_API_URL dentro de MuralScene.tsx"
+        );
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        setFeedbackStatus('success');
+      } else {
+        // Envío real vía POST con fetch a Web3Forms, Google Apps Script o Formspree
+        const response = await fetch(FEEDBACK_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            comentario: feedbackComment.trim(),
+            fecha: new Date().toLocaleString('es-AR'),
+            origen: 'Mural Final - Vestigios',
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en el envío (${response.status})`);
+        }
+
+        setFeedbackStatus('success');
+      }
+    } catch (err: any) {
+      console.error('Error al enviar el formulario de feedback:', err);
+      setFeedbackErrorMsg(
+        'Hubo un problema al enviar tu comentario. Por favor, intentá nuevamente.'
+      );
+      setFeedbackStatus('error');
+    }
   };
 
   // Strip any leading/trailing quotes from the quote string
@@ -288,6 +342,70 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
               <span>{copiedLink ? '¡Enlace copiado al portapapeles!' : 'Compartir sitio web con amigos'}</span>
             </button>
           </div>
+        </div>
+
+        {/* Formulario de Feedback sobre el recorrido */}
+        <div className="pt-2">
+          {feedbackStatus === 'success' ? (
+            <div className="p-6 rounded-xl bg-[#0a0908] border border-emerald-500/40 text-center space-y-2.5 animate-fadeIn">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <p className="font-display font-bold text-sm sm:text-base text-emerald-300">
+                ¡Gracias por compartir tu experiencia en el recorrido!
+              </p>
+              <p className="text-xs font-body text-white/60 max-w-md mx-auto">
+                Tu aporte nos ayuda a profundizar la memoria colectiva y enriquecer la experiencia comunitaria.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleFeedbackSubmit} className="p-4 sm:p-5 rounded-xl bg-[#0a0908] border border-white/10 space-y-3">
+              <label
+                htmlFor="feedback-comment"
+                className="block font-display font-bold text-sm sm:text-base text-white"
+              >
+                ¿Contanos qué te pareció el recorrido?
+              </label>
+
+              <textarea
+                id="feedback-comment"
+                required
+                rows={3}
+                value={feedbackComment}
+                onChange={(e) => setFeedbackComment(e.target.value)}
+                placeholder="Escribí aquí tus reflexiones, comentarios o impresiones sobre la experiencia..."
+                disabled={feedbackStatus === 'sending'}
+                className="w-full p-3.5 rounded-xl bg-[#141211] border border-white/15 focus:border-[#c9b79c] focus:outline-none focus:ring-1 focus:ring-[#c9b79c] text-sm text-[#eaeaea] placeholder-white/30 resize-y min-h-[90px] disabled:opacity-50 transition-colors"
+              />
+
+              {feedbackStatus === 'error' && (
+                <div className="text-xs font-mono-archive text-[#e53935] flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{feedbackErrorMsg}</span>
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={feedbackStatus === 'sending' || !feedbackComment.trim()}
+                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-[#7a1e1e] hover:bg-[#992626] border border-[#e53935]/50 text-white font-mono-archive text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md active:scale-95"
+                >
+                  {feedbackStatus === 'sending' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#eaeaea]" />
+                      <span>Enviando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 text-[#eaeaea]" />
+                      <span>Enviar</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         {/* Institutional Accreditation Footer */}
