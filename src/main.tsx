@@ -1,6 +1,7 @@
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { inject } from '@vercel/analytics';
 
 // Ensure window.fetch is writable and configurable in all contexts
 try {
@@ -25,5 +26,8 @@ try {
     } catch {}
   }
 } catch {}
+
+// Initialize Vercel Web Analytics
+inject();
 
 createRoot(document.getElementById('root')!).render(<App />);
