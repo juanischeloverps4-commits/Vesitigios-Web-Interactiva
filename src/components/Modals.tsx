@@ -91,14 +91,6 @@ export const Modals: React.FC<ModalsProps> = ({
     return doc.id === activeDifusionDocId;
   }) || LIBRARY_DOCUMENTS[0];
 
-  const filteredSections = currentDoc.sections.filter(s => {
-    if (!docSearchQuery.trim()) return true;
-    const q = docSearchQuery.toLowerCase();
-    return s.title.toLowerCase().includes(q) ||
-           s.summary.toLowerCase().includes(q) ||
-           s.content.toLowerCase().includes(q) ||
-           (s.quotes && s.quotes.some(quote => quote.toLowerCase().includes(q)));
-  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-6 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto">
@@ -401,155 +393,13 @@ Argentina a través de una silueta proyectada.</li>
               </div>
             </div>
 
-            {/* Key Topics Tags */}
-            <div className="p-3.5 rounded-xl bg-[#151413] border border-white/10">
-              <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-[#c9b79c] mb-2 flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-[#e53935]" />
-                <span>Ejes Temáticos Documentados:</span>
-              </h4>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs font-mono-archive text-white/85">
-                {currentDoc.keyTopics.map((topic, i) => (
-                  <li key={i} className="flex items-start gap-2 bg-black/40 p-2 rounded border border-white/5">
-                    <span className="text-[#e53935] font-bold">›</span>
-                    <span>{topic}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            {/* Document Interactive Reader & Sections */}
-            <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
-                <div className="flex items-center gap-2">
-                  <Bookmark className="w-4 h-4 text-[#e53935]" />
-                  <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white">
-                    Capítulos y Secciones Desplegables ({filteredSections.length} de {currentDoc.sections.length}):
-                  </h4>
-                </div>
-
-                {/* Search Bar inside Document */}
-                <div className="relative max-w-xs w-full">
-                  <Search className="w-3.5 h-3.5 text-[#c9b79c] absolute left-2.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={docSearchQuery}
-                    onChange={(e) => setDocSearchQuery(e.target.value)}
-                    placeholder="Filtrar temas o testimonios..."
-                    className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#090807] border border-white/20 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#e53935] font-mono-archive"
-                  />
-                  {docSearchQuery && (
-                    <button
-                      onClick={() => setDocSearchQuery('')}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-white/50 hover:text-white"
-                    >
-                      Limpiar
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Sections Accordion */}
-              <div className="space-y-2.5">
-                {filteredSections.map((sec) => {
-                  const isExpanded = expandedSectionId === sec.id || filteredSections.length === 1;
-                  return (
-                    <div
-                      key={sec.id}
-                      className={`rounded-xl border transition-all ${
-                        isExpanded
-                          ? 'bg-[#181615] border-[#e53935]/80 shadow-lg'
-                          : 'bg-[#090807] border-white/10 hover:border-white/30'
-                      }`}
-                    >
-                      {/* Section Title Bar */}
-                      <button
-                        onClick={() => setExpandedSectionId(isExpanded ? null : sec.id)}
-                        className="w-full p-3.5 text-left flex items-start justify-between gap-3 focus:outline-none"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-display font-black text-sm text-white">
-                              {sec.title}
-                            </span>
-                            {sec.page && (
-                              <span className="text-[10px] font-mono-archive px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[#c9b79c]">
-                                {sec.page}
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs text-white/70 font-body leading-snug">
-                            {sec.summary}
-                          </p>
-                        </div>
-                        <div className="p-1 rounded-md bg-white/5 text-white/70 mt-1 shrink-0">
-                          {isExpanded ? (
-                            <ChevronDown className="w-4 h-4 text-[#e53935]" />
-                          ) : (
-                            <ChevronRight className="w-4 h-4 text-[#c9b79c]" />
-                          )}
-                        </div>
-                      </button>
-
-                      {/* Unfolded Full Text & Verbatim Excerpts */}
-                      {isExpanded && (
-                        <div className="px-4 pb-4 pt-1 border-t border-white/10 space-y-3 animate-fadeIn">
-                          <div className="text-xs sm:text-sm font-body text-[#eaeaea]/90 leading-relaxed whitespace-pre-line pt-2">
-                            {sec.content}
-                          </div>
-
-                          {/* Historical Quotes from Document */}
-                          {sec.quotes && sec.quotes.length > 0 && (
-                            <div className="space-y-2 pt-2">
-                              {sec.quotes.map((quote, qIdx) => (
-                                <div
-                                  key={qIdx}
-                                  className="p-3 rounded-lg bg-black/60 border-l-2 border-[#e53935] flex items-start justify-between gap-3"
-                                >
-                                  <div className="flex items-start gap-2 text-xs font-mono-archive text-[#c9b79c] italic leading-relaxed">
-                                    <Quote className="w-4 h-4 text-[#e53935] shrink-0 mt-0.5" />
-                                    <span>{quote}</span>
-                                  </div>
-                                  <button
-                                    onClick={() => handleCopyQuote(quote)}
-                                    className="p-1.5 rounded bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors shrink-0"
-                                    title="Copiar cita"
-                                  >
-                                    {copiedQuote === quote ? (
-                                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                    ) : (
-                                      <Copy className="w-3.5 h-3.5" />
-                                    )}
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-
-                {filteredSections.length === 0 && (
-                  <div className="p-6 text-center text-xs font-mono-archive text-white/50 bg-[#090807] rounded-xl border border-white/10">
-                    No se encontraron secciones con el término "{docSearchQuery}".
-                  </div>
-                )}
-              </div>
-            </div>
 
             {/* Toast feedback for download */}
             {downloadingDocId && (
               <div className="p-2.5 rounded-lg bg-emerald-950/90 border border-emerald-500/60 text-emerald-300 text-xs font-mono-archive text-center animate-fadeIn shadow-lg flex items-center justify-center gap-2">
                 <Download className="w-4 h-4 animate-bounce text-emerald-400" />
                 <span>Generando y descargando archivo <strong>{currentDoc.pdfFileName}</strong>...</span>
-              </div>
-            )}
-
-            {/* Toast feedback for copied quote */}
-            {copiedQuote && (
-              <div className="p-2 rounded-lg bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-mono-archive text-center animate-fadeIn">
-                ✓ Cita textual copiada al portapapeles para estudio y difusión.
               </div>
             )}
 

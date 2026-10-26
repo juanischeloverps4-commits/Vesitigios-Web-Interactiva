@@ -101,13 +101,13 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             onClick={() => onSelectPath('camino_b')}
             onMouseEnter={() => onHoverInteractive('Explorar Sótano', true)}
             onMouseLeave={() => onHoverInteractive('', false)}
-            className="group relative rounded-xl sm:rounded-2xl bg-[#141312]/95 border border-white/15 hover:border-[#7a1e1e] p-2.5 sm:p-3 md:p-3.5 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(122,30,30,0.4)] flex flex-col justify-between overflow-hidden"
+            className="group relative rounded-xl sm:rounded-2xl bg-[#141312]/95 border border-white/15 hover:border-white/40 p-2.5 sm:p-3 md:p-3.5 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5)] flex flex-col justify-between overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-48 h-48 bg-[#7a1e1e]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#7a1e1e]/20 transition-colors" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none group-hover:bg-white/10 transition-colors" />
 
             <div>
               <div className="flex flex-wrap items-center justify-between gap-1 mb-1 sm:mb-1.5">
-                <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono-archive tracking-wider text-[#e53935] uppercase px-1.5 py-0.5 rounded bg-[#7a1e1e]/20 border border-[#7a1e1e]/40 shrink-0">
+                <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono-archive tracking-wider text-[#eaeaea] uppercase px-1.5 py-0.5 rounded bg-white/10 border border-white/20 shrink-0">
                   CAMINO B · SÓTANOS
                 </span>
                 <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono-archive text-[#eaeaea] shrink-0">
@@ -223,7 +223,7 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
                 </svg>
               </div>
 
-              <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-white mb-0.5 group-hover:text-[#e53935] transition-colors leading-tight">
+              <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-white mb-0.5 group-hover:text-[#eaeaea] transition-colors leading-tight">
                 El Pasillo y el Sótano · Arquitectura
               </h3>
               <p className="font-body text-[9px] sm:text-xs text-[#eaeaea]/80 leading-relaxed mb-1 line-clamp-1 sm:line-clamp-2 landscape:line-clamp-1 md:landscape:line-clamp-2">
@@ -232,9 +232,9 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             </div>
 
             {/* Botón táctil con superposición transparente interactiva */}
-            <div className="mt-0.5 sm:mt-1 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#7a1e1e]/20 hover:bg-[#7a1e1e]/40 active:bg-[#7a1e1e]/60 border border-[#e53935]/30 hover:border-[#e53935]/70 flex items-center justify-between text-[10px] sm:text-xs font-mono-archive text-[#e53935] group-hover:text-white transition-all shadow-sm">
+            <div className="mt-0.5 sm:mt-1 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white/5 hover:bg-white/15 active:bg-white/20 border border-white/15 hover:border-white/40 flex items-center justify-between text-[10px] sm:text-xs font-mono-archive text-[#eaeaea] group-hover:text-white transition-all shadow-sm">
               <span>Continuar al sótano</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#e53935] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#eaeaea] group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
           </div>
         </div>
