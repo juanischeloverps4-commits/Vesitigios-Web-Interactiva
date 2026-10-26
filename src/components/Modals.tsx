@@ -635,18 +635,18 @@ Argentina a través de una silueta proyectada.</li>
               href="https://www.instagram.com/vestigios_negacionismo/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 rounded-xl bg-[#171514] border border-[#e53935]/40 hover:border-[#e53935] flex items-center gap-3.5 transition-colors group block shadow-lg"
+              className="p-4 rounded-xl bg-[#171514] border border-[#e53935]/40 hover:border-[#e53935] flex items-center gap-3.5 transition-colors group shadow-lg overflow-hidden"
             >
               <div className="w-11 h-11 rounded-lg bg-[#7a1e1e]/40 flex items-center justify-center text-[#e53935] shrink-0">
                 <Instagram className="w-6 h-6" />
               </div>
-              <div>
-                <span className="text-[10px] font-mono-archive text-[#c9b79c] uppercase">Instagram Oficial</span>
-                <div className="font-display font-bold text-sm sm:text-base text-white group-hover:text-[#e53935] transition-colors">
+              <div className="min-w-0 flex-1">
+                <span className="text-[10px] font-mono-archive text-[#c9b79c] uppercase block">Instagram Oficial</span>
+                <div className="font-display font-bold text-sm sm:text-base text-white group-hover:text-[#e53935] transition-colors truncate">
                   @vestigios_negacionismo
                 </div>
-                <p className="text-xs font-body text-white/70 mt-0.5">
-                  Seguinos en https://www.instagram.com/vestigios_negacionismo/
+                <p className="text-[11px] sm:text-xs font-body text-white/70 mt-0.5 break-all leading-snug">
+                  Seguinos en instagram.com/vestigios_negacionismo
                 </p>
               </div>
             </a>
