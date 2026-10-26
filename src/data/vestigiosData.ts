@@ -536,7 +536,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'Directora Creativa / Curadora',
     area: 'Instalación Física',
     initials: 'CM',
-    bio: 'Curaduría sensorial del aula intervenida, narrativa en primera persona y experiencia de las vendas.',
+    bio: 'Curaduría sensorial del aula intervenida, narrativa en primera persona y experinecia de la instalación física.',
     image: '/assets/aistudio/CIELO_9edf063b.jpeg',
     instagram: 'https://www.instagram.com/cielomarker?mdxt=ZHVpMXZyOHh4enkw',
   },
