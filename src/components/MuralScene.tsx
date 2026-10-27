@@ -433,9 +433,19 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
             </span>
             <ExternalLink className="w-3.5 h-3.5 text-[#c9b79c] opacity-70 group-hover:opacity-100 shrink-0" />
           </a>
-          <div className="text-[11px] sm:text-xs text-white/40">
-            FADyCC — Universidad Nacional del Nordeste (UNNE) · 2026
-          </div>
+
+          <a
+            href="https://maps.app.goo.gl/E68yWe1AvwME2cMu8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-white/60 hover:text-white hover:underline transition-all cursor-pointer group"
+            title="Abrir ubicación del edificio de la facultad FADyCC - UNNE en Google Maps"
+          >
+            <span className="underline decoration-dotted underline-offset-4 group-hover:decoration-solid">
+              FADyCC — Universidad Nacional del Nordeste (UNNE) · 2026
+            </span>
+            <ExternalLink className="w-3.5 h-3.5 text-[#c9b79c] opacity-70 group-hover:opacity-100 shrink-0" />
+          </a>
         </div>
       </div>
     </div>

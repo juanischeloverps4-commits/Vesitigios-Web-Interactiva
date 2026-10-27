@@ -84,7 +84,7 @@ const DraggableCommentBubble: React.FC<DraggableCommentBubbleProps> = ({ comment
         transform: `translate3d(${offset.x}px, ${offset.y}px, 0) rotate(${currentRotation}deg)`,
         touchAction: 'none',
       }}
-      className={`absolute select-none min-w-[210px] sm:min-w-[270px] max-w-[260px] sm:max-w-[340px] xl:max-w-[360px] landscape:min-w-[190px] landscape:max-w-[240px] p-2.5 sm:p-3.5 landscape:p-2 rounded-xl bg-[#181615]/95 border shadow-[0_12px_28px_rgba(0,0,0,0.95)] backdrop-blur-md text-left transition-shadow duration-150 pointer-events-auto ${
+      className={`absolute select-none w-[255px] sm:w-[310px] max-w-[86vw] p-3 sm:p-3.5 rounded-xl bg-[#181615]/95 border shadow-[0_12px_28px_rgba(0,0,0,0.95)] backdrop-blur-md text-left transition-shadow duration-150 pointer-events-auto box-border overflow-hidden ${
         isDragging
           ? 'cursor-grabbing border-amber-400 shadow-[0_15px_40px_rgba(245,158,11,0.5)] scale-105 z-50 ring-2 ring-amber-400'
           : 'cursor-grab border-[#7a1e1e]/85 hover:border-[#e53935] hover:scale-[1.02] z-30'
@@ -93,12 +93,12 @@ const DraggableCommentBubble: React.FC<DraggableCommentBubbleProps> = ({ comment
       }`}
       title="Hacé clic o arrastrá para mover este comentario a cualquier lugar de la pantalla"
     >
-      {/* Header con nombre de usuario completo y legible sin recortes ni iconos molestos */}
-      <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-white/10">
-        <span className="text-xs sm:text-sm font-mono-archive text-[#e53935] font-bold">
+      {/* Header con nombre de usuario y fecha completamente contenidos dentro de la caja sin salirse */}
+      <div className="flex items-center justify-between gap-1.5 mb-1.5 pb-1 border-b border-white/10 w-full min-w-0">
+        <span className="text-[11px] sm:text-xs font-mono-archive text-[#e53935] font-bold truncate min-w-0 flex-1">
           {comment.user}
         </span>
-        <span className="text-[10px] sm:text-xs text-[#c9b79c]/80 whitespace-nowrap shrink-0 pl-1 font-mono-archive">
+        <span className="text-[9.5px] sm:text-[11px] text-[#c9b79c]/80 whitespace-nowrap shrink-0 font-mono-archive pl-1">
           {comment.timeAgo}
         </span>
       </div>

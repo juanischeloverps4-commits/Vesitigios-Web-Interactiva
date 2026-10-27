@@ -90,9 +90,9 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             </div>
 
             {/* Botón táctil llamativo y visible */}
-            <div className="mt-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#d97706] to-[#f59e0b] hover:from-[#b45309] hover:to-[#d97706] border-2 border-amber-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-wider transition-all shadow-[0_0_18px_rgba(245,158,11,0.55)] group-hover:scale-[1.02]">
-              <span>Continuar a las escaleras</span>
-              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <div className="mt-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-[#d97706] to-[#f59e0b] hover:from-[#b45309] hover:to-[#d97706] border-2 border-amber-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-normal sm:tracking-wider transition-all shadow-[0_0_18px_rgba(245,158,11,0.55)] group-hover:scale-[1.02] w-full shrink-0">
+              <span className="truncate">Continuar a las escaleras</span>
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-1" />
             </div>
           </div>
 
@@ -232,9 +232,9 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             </div>
 
             {/* Botón táctil llamativo y visible */}
-            <div className="mt-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#b91c1c] to-[#e53935] hover:from-[#991b1b] hover:to-[#b91c1c] border-2 border-red-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-wider transition-all shadow-[0_0_18px_rgba(229,57,53,0.55)] group-hover:scale-[1.02]">
-              <span>Continuar al sótano</span>
-              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <div className="mt-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-[#b91c1c] to-[#e53935] hover:from-[#991b1b] hover:to-[#b91c1c] border-2 border-red-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-normal sm:tracking-wider transition-all shadow-[0_0_18px_rgba(229,57,53,0.55)] group-hover:scale-[1.02] w-full shrink-0">
+              <span className="truncate">Continuar al sótano</span>
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-1" />
             </div>
           </div>
         </div>
