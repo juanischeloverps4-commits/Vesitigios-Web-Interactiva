@@ -278,7 +278,7 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                 </div>
 
                 {/* Archival Frame / Photo Preview with Authentic Image */}
-                <div className="relative aspect-[16/10] w-full rounded-lg bg-[#0a0908] border border-white/10 mb-3 overflow-hidden flex flex-col items-center justify-center p-4 text-center">
+                <div className="relative aspect-[16/11.5] w-full rounded-lg bg-[#0a0908] border border-white/10 mb-3 overflow-hidden flex flex-col justify-between">
                   {piece.image ? (
                     <>
                       <img
@@ -286,41 +286,50 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                         alt={piece.person}
                         className="absolute inset-0 w-full h-full object-cover object-top filter grayscale contrast-125 brightness-90 group-hover:scale-105 group-hover:grayscale-0 group-hover:contrast-105 transition-all duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/30" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
                     </>
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/40" />
                   )}
                   
-                  <div className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded bg-[#7a1e1e]/90 text-[11px] font-mono-archive uppercase text-white tracking-widest border border-[#e53935]/40 backdrop-blur-sm">
-                    {piece.year}
+                  {/* Top Bar inside image */}
+                  <div className="relative z-10 flex items-start justify-between p-2.5 w-full pointer-events-none">
+                    <div className="px-2 py-0.5 rounded bg-[#7a1e1e]/90 text-[10px] sm:text-[11px] font-mono-archive uppercase text-white tracking-wider border border-[#e53935]/40 backdrop-blur-sm shadow-md">
+                      {piece.year}
+                    </div>
+
+                    {/* Secondary thumbnail if there is a second person in this testimony */}
+                    {piece.secondaryImage && (
+                      <div className="w-9 h-9 rounded-full overflow-hidden border border-white/60 shadow-lg bg-black group-hover:scale-110 transition-transform shrink-0 ml-auto">
+                        <img
+                          src={piece.secondaryImage}
+                          alt={piece.secondaryPerson || ''}
+                          className={`w-full h-full object-cover ${
+                            piece.secondaryImage.includes('Ramon_Meza') ? 'object-[50%_55%]' : 'object-top'
+                          } filter grayscale contrast-110 group-hover:grayscale-0 transition-all duration-300`}
+                        />
+                      </div>
+                    )}
                   </div>
 
-                  {/* Secondary thumbnail if there is a second person in this testimony */}
-                  {piece.secondaryImage && (
-                    <div className="absolute top-2 right-2 z-10 w-9 h-9 rounded-full overflow-hidden border border-white/60 shadow-lg bg-black group-hover:scale-110 transition-transform">
-                      <img
-                        src={piece.secondaryImage}
-                        alt={piece.secondaryPerson || ''}
-                        className={`w-full h-full object-cover ${
-                          piece.secondaryImage.includes('Ramon_Meza') ? 'object-[50%_55%]' : 'object-top'
-                        } filter grayscale contrast-110 group-hover:grayscale-0 transition-all duration-300`}
-                      />
-                    </div>
-                  )}
-
-                  <div className="z-10 space-y-1 mt-auto pb-1">
-                    <div className="text-white font-display font-black text-lg sm:text-xl md:text-2xl leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {/* Bottom Content inside image: Person Name, Full Yellow Subtitle, and Causa Caballero in separate row */}
+                  <div className="relative z-10 w-full pt-4 pb-2.5 px-3 text-left bg-gradient-to-t from-black/95 via-black/85 to-transparent flex flex-col justify-end space-y-1">
+                    <div className="text-white font-display font-black text-sm sm:text-base leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
                       {piece.person}
                     </div>
-                    <div className="text-xs sm:text-sm text-[#c9b79c] font-mono-archive line-clamp-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-                      {piece.subtitle}
-                    </div>
-                  </div>
 
-                  <div className="absolute bottom-2 right-2 z-10 text-xs text-white/80 font-mono-archive flex items-center gap-1 bg-black/75 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
-                    <FileCheck className="w-3.5 h-3.5 text-[#c9b79c]" />
-                    <span>Causa Caballero</span>
+                    {/* Subtítulo en amarillo destacado: entra completo, sin recortes ni ser tapado por Causa Caballero */}
+                    <p className="text-[11px] sm:text-xs text-amber-300 font-mono-archive leading-snug drop-shadow-[0_1px_3px_rgba(0,0,0,1)] font-medium break-words">
+                      {piece.subtitle}
+                    </p>
+
+                    {/* Badge Causa Caballero en su propia fila inferior: NUNCA tapa el texto en amarillo */}
+                    <div className="pt-0.5 flex items-center justify-end">
+                      <div className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-white/80 font-mono-archive bg-black/80 px-2 py-0.5 rounded backdrop-blur-sm border border-white/15 shadow-sm">
+                        <FileCheck className="w-3 h-3 text-amber-300 shrink-0" />
+                        <span>Causa Caballero</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

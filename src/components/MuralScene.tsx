@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VICTIM_FACES, REFLEXIVE_QUOTES } from '../data/vestigiosData';
 import { VictimFace } from '../types';
-import { Instagram, Share2, AlertTriangle, Clock, MapPin, ExternalLink, ChevronDown, Send, CheckCircle2, MessageSquare, Loader2 } from 'lucide-react';
+import { Instagram, Share2, AlertTriangle, Clock, MapPin, ExternalLink, ChevronDown, Send, CheckCircle2, MessageSquare, Loader2, User, Mail } from 'lucide-react';
 import { VestigiosLogo } from './VestigiosLogo';
 
 // =========================================================================
 // CONFIGURACIÓN DEL FORMULARIO DE FEEDBACK
-// Pegá aquí la URL de tu endpoint de Web3Forms, Google Apps Script o Formspree:
+// Envío simultáneo: Google Sheets (Google Apps Script) + Web3Forms
+// Correo receptor de notificaciones: somosvestigios@gmail.com
 // =========================================================================
-export const FEEDBACK_API_URL: string = "23d9f417-baac-45a1-9cb1-82d654481471";
+export const URL_GOOGLE_SHEETS: string =
+  'https://script.google.com/macros/s/AKfycbz_bL8kdNOSsWFdxnGLV3z4CMJxH_N-NIL_Fq9YE-oDeScbOXdHrKhZ3wLlTBPJZmch/exec';
+export const GOOGLE_SHEETS_SCRIPT_ID: string =
+  'AKfycbz_bL8kdNOSsWFdxnGLV3z4CMJxH_N-NIL_Fq9YE-oDeScbOXdHrKhZ3wLlTBPJZmch';
+export const FEEDBACK_RECEPTOR_EMAIL: string = 'somosvestigios@gmail.com';
+export const WEB3FORMS_ACCESS_KEY: string = '23d9f417-baac-45a1-9cb1-82d654481471';
+export const FEEDBACK_API_URL: string = WEB3FORMS_ACCESS_KEY;
 
 interface MuralSceneProps {
   onHoverInteractive: (label: string, isEntering: boolean) => void;
@@ -19,6 +26,8 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [copiedLink, setCopiedLink] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [feedbackName, setFeedbackName] = useState('');
+  const [feedbackEmail, setFeedbackEmail] = useState('');
   const [feedbackComment, setFeedbackComment] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [feedbackErrorMsg, setFeedbackErrorMsg] = useState<string | null>(null);
@@ -85,44 +94,94 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
     setFeedbackStatus('sending');
     setFeedbackErrorMsg(null);
 
+    const commentText = feedbackComment.trim();
+    const visitorName = feedbackName.trim();
+    const visitorEmail = feedbackEmail.trim();
+    const displayName = visitorName || 'Visitante - Mural Final';
+    const currentDate = new Date().toLocaleString('es-AR');
+    const currentIsoDate = new Date().toISOString();
+
     try {
-      if (FEEDBACK_API_URL === "URL_DE_TU_API_AQUI") {
-        // Simulación visual en desarrollo si no se especificó un key
-        await new Promise((resolve) => setTimeout(resolve, 800));
+      // 1. Preparar envío a Google Sheets (Google Apps Script Web App)
+      // Se envían los datos del visitante (si no colocó correo, queda vacío en lugar de poner la casilla oficial)
+      const sheetsData: Record<string, string> = {
+        // Columnas exactas de la planilla (Fecha, Nombre, Correo, Mensaje):
+        Fecha: currentDate,
+        Nombre: displayName,
+        Correo: visitorEmail,
+        Mensaje: commentText,
+        // Alias de compatibilidad por si el script lee minúsculas:
+        fecha: currentDate,
+        timestamp: currentIsoDate,
+        nombre: displayName,
+        name: displayName,
+        correo: visitorEmail,
+        email: visitorEmail,
+        mensaje: commentText,
+        message: commentText,
+        comentario: commentText,
+        comentarios: commentText,
+        opinion: commentText,
+        origen: 'Mural Final - Vestigios',
+      };
+
+      const queryParams = new URLSearchParams(sheetsData).toString();
+      const sheetsUrlWithParams = `${URL_GOOGLE_SHEETS}?${queryParams}`;
+
+      // Google Apps Script responde con redirección 302 sin cabeceras CORS; mode: 'no-cors' garantiza que la solicitud se complete con éxito en el servidor
+      const sheetsPromise = fetch(sheetsUrlWithParams, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(sheetsData),
+      }).catch((err) => {
+        console.warn('Advertencia en envío a Google Sheets:', err);
+        return null;
+      });
+
+      // 2. Preparar envío a Web3Forms
+      // La clave de acceso ya remite a somosvestigios@gmail.com; en "email" va el del visitante (o se omite si no lo especificó)
+      const web3Payload: Record<string, string> = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        name: displayName,
+        subject: 'Nuevo testimonio / feedback sobre el recorrido - VESTIGIOS',
+        message: commentText,
+        from_name: 'Vestigios Web Transmedia',
+        fecha: currentDate,
+        origen: 'Mural Final - Vestigios',
+      };
+
+      if (visitorEmail) {
+        web3Payload.email = visitorEmail;
+      }
+
+      const web3Promise = fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(web3Payload),
+      }).then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Web3Forms respondió con estado ${res.status}`);
+        }
+        return res;
+      }).catch((err) => {
+        console.warn('Advertencia en envío a Web3Forms:', err);
+        return null;
+      });
+
+      // Ejecutar ambos envíos en paralelo
+      const [sheetsResult, web3Result] = await Promise.all([sheetsPromise, web3Promise]);
+
+      // Si al menos uno de los servicios se procesó correctamente, confirmamos el éxito al usuario
+      if (sheetsResult !== null || web3Result !== null) {
         setFeedbackStatus('success');
       } else {
-        // Reconocer si se ingresó un Access Key de Web3Forms (UUID) o una URL personalizada
-        const isWeb3Key = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(FEEDBACK_API_URL.trim());
-        const endpoint = isWeb3Key ? 'https://api.web3forms.com/submit' : FEEDBACK_API_URL.trim();
-
-        const payload = isWeb3Key
-          ? {
-              access_key: FEEDBACK_API_URL.trim(),
-              name: 'Visitante de la Casa por la Memoria',
-              subject: 'Nuevo testimonio / feedback sobre el recorrido - VESTIGIOS',
-              message: feedbackComment.trim(),
-              from_name: 'Vestigios Web Transmedia',
-            }
-          : {
-              comentario: feedbackComment.trim(),
-              fecha: new Date().toLocaleString('es-AR'),
-              origen: 'Mural Final - Vestigios',
-            };
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en el envío (${response.status})`);
-        }
-
-        setFeedbackStatus('success');
+        throw new Error('No se pudo establecer conexión con los servidores de destino.');
       }
     } catch (err: any) {
       console.error('Error al enviar el formulario de feedback:', err);
@@ -369,24 +428,68 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
               </p>
             </div>
           ) : (
-            <form onSubmit={handleFeedbackSubmit} className="p-4 sm:p-5 rounded-xl bg-[#0a0908] border border-white/10 space-y-3">
-              <label
-                htmlFor="feedback-comment"
-                className="block font-display font-bold text-sm sm:text-base text-white"
-              >
-                ¿Contanos qué te pareció el recorrido?
-              </label>
+            <form onSubmit={handleFeedbackSubmit} className="p-4 sm:p-5 rounded-xl bg-[#0a0908] border border-white/10 space-y-3.5">
+              <div>
+                <label
+                  htmlFor="feedback-comment"
+                  className="block font-display font-bold text-sm sm:text-base text-white mb-1.5"
+                >
+                  ¿Contanos qué te pareció el recorrido?
+                </label>
+                <textarea
+                  id="feedback-comment"
+                  required
+                  rows={3}
+                  value={feedbackComment}
+                  onChange={(e) => setFeedbackComment(e.target.value)}
+                  placeholder="Escribí aquí tus reflexiones, comentarios o impresiones sobre la experiencia..."
+                  disabled={feedbackStatus === 'sending'}
+                  className="w-full p-3.5 rounded-xl bg-[#141211] border border-white/15 focus:border-[#c9b79c] focus:outline-none focus:ring-1 focus:ring-[#c9b79c] text-sm text-[#eaeaea] placeholder-white/30 resize-y min-h-[90px] disabled:opacity-50 transition-colors"
+                />
+              </div>
 
-              <textarea
-                id="feedback-comment"
-                required
-                rows={3}
-                value={feedbackComment}
-                onChange={(e) => setFeedbackComment(e.target.value)}
-                placeholder="Escribí aquí tus reflexiones, comentarios o impresiones sobre la experiencia..."
-                disabled={feedbackStatus === 'sending'}
-                className="w-full p-3.5 rounded-xl bg-[#141211] border border-white/15 focus:border-[#c9b79c] focus:outline-none focus:ring-1 focus:ring-[#c9b79c] text-sm text-[#eaeaea] placeholder-white/30 resize-y min-h-[90px] disabled:opacity-50 transition-colors"
-              />
+              {/* Campos opcionales: Nombre y Correo del visitante */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
+                <div>
+                  <label
+                    htmlFor="feedback-name"
+                    className="flex items-center gap-1.5 text-xs font-mono-archive text-[#c9b79c] mb-1"
+                  >
+                    <User className="w-3.5 h-3.5 text-[#c9b79c]/70 shrink-0" />
+                    <span>Tu nombre o alias</span>
+                    <span className="text-white/40 text-[10px] font-normal">(opcional)</span>
+                  </label>
+                  <input
+                    id="feedback-name"
+                    type="text"
+                    value={feedbackName}
+                    onChange={(e) => setFeedbackName(e.target.value)}
+                    placeholder="Ej: Juani, Ana..."
+                    disabled={feedbackStatus === 'sending'}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#141211] border border-white/15 focus:border-[#c9b79c] focus:outline-none focus:ring-1 focus:ring-[#c9b79c] text-xs sm:text-sm text-[#eaeaea] placeholder-white/30 disabled:opacity-50 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="feedback-email"
+                    className="flex items-center gap-1.5 text-xs font-mono-archive text-[#c9b79c] mb-1"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#c9b79c]/70 shrink-0" />
+                    <span>Tu correo</span>
+                    <span className="text-white/40 text-[10px] font-normal">(opcional)</span>
+                  </label>
+                  <input
+                    id="feedback-email"
+                    type="email"
+                    value={feedbackEmail}
+                    onChange={(e) => setFeedbackEmail(e.target.value)}
+                    placeholder="ejemplo@correo.com"
+                    disabled={feedbackStatus === 'sending'}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#141211] border border-white/15 focus:border-[#c9b79c] focus:outline-none focus:ring-1 focus:ring-[#c9b79c] text-xs sm:text-sm text-[#eaeaea] placeholder-white/30 disabled:opacity-50 transition-colors"
+                  />
+                </div>
+              </div>
 
               {feedbackStatus === 'error' && (
                 <div className="text-xs font-mono-archive text-[#e53935] flex items-center gap-1.5">
@@ -395,11 +498,14 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-1">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-1">
+                <span className="text-[11px] font-mono-archive text-white/40">
+                  Nombre y correo son opcionales. Podés participar de manera anónima.
+                </span>
                 <button
                   type="submit"
                   disabled={feedbackStatus === 'sending' || !feedbackComment.trim()}
-                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-[#7a1e1e] hover:bg-[#992626] border border-[#e53935]/50 text-white font-mono-archive text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md active:scale-95"
+                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-[#7a1e1e] hover:bg-[#992626] border border-[#e53935]/50 text-white font-mono-archive text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md active:scale-95 shrink-0"
                 >
                   {feedbackStatus === 'sending' ? (
                     <>
@@ -444,7 +550,6 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
             <span className="underline decoration-dotted underline-offset-4 group-hover:decoration-solid">
               FADyCC — Universidad Nacional del Nordeste (UNNE) · 2026
             </span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#c9b79c] opacity-70 group-hover:opacity-100 shrink-0" />
           </a>
         </div>
       </div>
