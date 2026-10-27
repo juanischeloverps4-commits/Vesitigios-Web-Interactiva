@@ -3,6 +3,9 @@ import { SceneId } from '../types';
 import { ArrowUpRight, Footprints, Video, Layers, Compass, HelpCircle } from 'lucide-react';
 import { NavigationGuideModal } from './NavigationGuideModal';
 
+// Indicador en memoria por carga de página: se reinicia si el usuario refresca la página (F5/reload)
+let hasAutoShownGuideThisPageLoad = false;
+
 interface VestibuleSceneProps {
   onSelectPath: (scene: SceneId) => void;
   onOpenLibraryModal?: () => void;
@@ -26,32 +29,20 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
   completedPaths,
   onHoverInteractive,
 }) => {
+  const hasProgress = (visitedA + visitedB) > 0;
+
+  // Solo se abre automáticamente una vez al inicio por carga de página si el usuario no tiene progreso
   const [isGuideOpen, setIsGuideOpen] = useState(() => {
-    try {
-      return sessionStorage.getItem('vestigios_guide_dismissed_in_session') !== 'true';
-    } catch {
-      return true;
+    if (hasProgress || hasAutoShownGuideThisPageLoad) {
+      return false;
     }
+    hasAutoShownGuideThisPageLoad = true;
+    return true;
   });
 
-  useEffect(() => {
-    try {
-      const isDismissed = sessionStorage.getItem('vestigios_guide_dismissed_in_session');
-      if (isDismissed !== 'true') {
-        setIsGuideOpen(true);
-      }
-    } catch {
-      setIsGuideOpen(true);
-    }
-  }, []);
-
   const handleCloseGuide = () => {
+    hasAutoShownGuideThisPageLoad = true;
     setIsGuideOpen(false);
-    try {
-      sessionStorage.setItem('vestigios_guide_dismissed_in_session', 'true');
-    } catch {
-      // ignore
-    }
   };
 
   return (

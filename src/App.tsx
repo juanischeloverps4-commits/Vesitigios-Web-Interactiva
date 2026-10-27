@@ -373,14 +373,7 @@ export default function App() {
       >
         {currentScene === 'intro' && (
           <NoiseIntro
-            onEnterHouse={() => {
-              try {
-                sessionStorage.removeItem('vestigios_guide_dismissed_in_session');
-              } catch {
-                // ignore
-              }
-              performTransition('vestibulo', 'in');
-            }}
+            onEnterHouse={() => performTransition('vestibulo', 'in')}
             onHoverInteractive={handleHoverInteractive}
           />
         )}

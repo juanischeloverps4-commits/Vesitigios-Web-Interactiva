@@ -51,6 +51,10 @@ class AudioSystem {
   private duckTimer: ReturnType<typeof setInterval> | null = null;
   private audioCtx: AudioContext | null = null;
 
+  // Active crossfade timer references to ensure clean 2-second transitions
+  private activeFadeInTimer: ReturnType<typeof setInterval> | null = null;
+  private activeFadeOutTimers: Set<ReturnType<typeof setInterval>> = new Set();
+
   constructor() {
     this.setupAutoplayUnlock();
   }
@@ -317,56 +321,76 @@ class AudioSystem {
       return;
     }
 
-    // 1. Smoothly fade out previous track (desvanecimiento suave al salir)
+    // 1. Desvanecimiento suave de salida (fade-out de 2 segundos) de la pista previa
     const oldAudio = this.currentBgAudio;
     if (oldAudio && oldAudio !== this.audioPool.get(trackUrl)) {
-      let curVol = oldAudio.volume;
-      const fadeSteps = 12;
-      const step = curVol / fadeSteps;
+      const initialVol = oldAudio.volume;
+      const fadeOutDurationMs = 2000; // 2 segundos suaves de salida
+      const intervalMs = 40;
+      const steps = fadeOutDurationMs / intervalMs; // 50 pasos
+      const step = initialVol / steps;
+      let curVol = initialVol;
+
       const fadeOutTimer = setInterval(() => {
         curVol = Math.max(0, curVol - step);
         try {
           oldAudio.volume = curVol;
         } catch {}
-        if (curVol <= 0.01) {
+        if (curVol <= 0.005) {
           clearInterval(fadeOutTimer);
+          this.activeFadeOutTimers.delete(fadeOutTimer);
           try {
+            oldAudio.volume = 0;
             oldAudio.pause();
           } catch {}
         }
-      }, 35);
+      }, intervalMs);
+
+      this.activeFadeOutTimers.add(fadeOutTimer);
     }
 
-    // 2. Obtener pista precargada y realizar fade-in progresivo (0 -> effectiveVol)
+    // 2. Obtener pista precargada y realizar fade-in progresivo suave de 2 segundos (0 -> effectiveVol)
     try {
       const audio = this.getPreloadedAudio(trackUrl);
       audio.loop = true;
       audio.muted = false;
-      audio.volume = 0; // Inicia en 0 para entrada cinematográfica
+      audio.volume = 0; // Inicia en 0 para entrada cinematográfica suave
       this.currentBgAudio = audio;
       this.currentTrackUrl = trackUrl;
+
+      // Cancelar cualquier fade-in anterior que estuviese en ejecución
+      if (this.activeFadeInTimer) {
+        clearInterval(this.activeFadeInTimer);
+        this.activeFadeInTimer = null;
+      }
 
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             let inVol = 0;
-            const inSteps = 14;
+            const fadeInDurationMs = 2000; // 2 segundos suaves de entrada
+            const intervalMs = 40;
+            const inSteps = fadeInDurationMs / intervalMs; // 50 pasos
             const inStep = effectiveVol / inSteps;
-            const fadeInTimer = setInterval(() => {
+
+            this.activeFadeInTimer = setInterval(() => {
               inVol = Math.min(effectiveVol, inVol + inStep);
               try {
                 if (this.currentBgAudio === audio) {
                   audio.volume = inVol;
                 }
               } catch {}
-              if (inVol >= effectiveVol - 0.01) {
-                clearInterval(fadeInTimer);
+              if (inVol >= effectiveVol - 0.005) {
+                if (this.activeFadeInTimer) {
+                  clearInterval(this.activeFadeInTimer);
+                  this.activeFadeInTimer = null;
+                }
                 if (this.currentBgAudio === audio) {
                   audio.volume = effectiveVol;
                 }
               }
-            }, 35);
+            }, intervalMs);
           })
           .catch(() => {
             if (!this.hasUnlockedAutoplay) {
@@ -379,27 +403,30 @@ class AudioSystem {
     }
   }
 
-  public stopTrack(fadeTimeMs: number = 400) {
+  public stopTrack(fadeTimeMs: number = 2000) {
     if (!this.currentBgAudio) return;
     const audio = this.currentBgAudio;
     this.currentTrackUrl = null;
 
     let vol = audio.volume;
-    const step = vol / (fadeTimeMs / 40);
+    const intervalMs = 40;
+    const steps = fadeTimeMs / intervalMs;
+    const step = vol / steps;
+
     const timer = setInterval(() => {
       vol = Math.max(0, vol - step);
       try {
         audio.volume = vol;
       } catch {}
-      if (vol <= 0.01) {
+      if (vol <= 0.005) {
         clearInterval(timer);
         try {
+          audio.volume = 0;
           audio.pause();
           audio.currentTime = 0;
-          audio.src = '';
         } catch {}
       }
-    }, 40);
+    }, intervalMs);
   }
 
   /* =========================================================================
