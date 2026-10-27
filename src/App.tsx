@@ -309,11 +309,19 @@ export default function App() {
   return (
     <div
       className={`relative w-full ${
-        currentScene === 'intro' || currentScene === 'vestibulo'
+        currentScene === 'intro'
           ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
           : 'min-h-screen overflow-x-hidden'
       } bg-[#090807] text-[#eaeaea] font-display`}
     >
+      {/* Archival Film Grain Effect Overlay (intensified during scene transitions) */}
+      <div
+        className={`film-grain-overlay pointer-events-none fixed inset-0 z-40 transition-opacity duration-500 ${
+          isTransitioning ? 'opacity-80' : 'opacity-25'
+        }`}
+        aria-hidden="true"
+      />
+
       {/* Interactive Custom Cursor */}
       <CustomCursor
         cursorLabel={cursorLabel}
@@ -349,10 +357,10 @@ export default function App() {
         onOpenAnalytics={() => setActiveModal('analytics')}
       />
 
-      {/* Main Content Area — Confinado estrictamente a 100dvh sin scroll en intro y vestíbulo */}
+      {/* Main Content Area — Confinado estrictamente a 100dvh sin scroll solo en intro */}
       <main
         className={`relative z-20 w-full transition-all duration-700 ${
-          currentScene === 'intro' || currentScene === 'vestibulo'
+          currentScene === 'intro'
             ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
             : 'min-h-screen'
         } ${

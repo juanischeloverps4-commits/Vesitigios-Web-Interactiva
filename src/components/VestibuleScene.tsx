@@ -26,9 +26,9 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
   onHoverInteractive,
 }) => {
   return (
-    <div className="relative w-full h-[100dvh] max-h-[100dvh] pt-12 sm:pt-14 md:pt-16 pb-14 sm:pb-16 px-3 sm:px-6 md:px-8 flex flex-col items-center justify-center select-none overflow-hidden">
-      {/* Unified centered column: Eliminates giant empty gaps on tablets and prevents any vertical scroll */}
-      <div className="w-full max-w-3xl lg:max-w-4xl flex flex-col items-center my-auto z-20 shrink-0 space-y-1.5 sm:space-y-2 md:space-y-3">
+    <div className="relative w-full min-h-screen pt-16 sm:pt-20 md:pt-24 pb-36 sm:pb-44 landscape:pt-16 landscape:pb-36 px-3 sm:px-6 md:px-8 flex flex-col items-center justify-start sm:justify-center select-none overflow-y-auto custom-scrollbar">
+      {/* Unified centered column: Eliminates giant empty gaps on tablets and prevents any vertical clipping */}
+      <div className="w-full max-w-3xl lg:max-w-4xl flex flex-col items-center z-20 shrink-0 space-y-3 sm:space-y-4 my-auto landscape:my-2">
         {/* Title & Guide Lead */}
         <div className="text-center max-w-xl space-y-0.5 shrink-0">
           <div className="flex flex-wrap items-center justify-center gap-1.5 mb-0.5">
@@ -38,17 +38,17 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             </div>
           </div>
 
-          <h2 className="font-display font-black text-sm sm:text-lg md:text-2xl text-white tracking-wide uppercase">
+          <h2 className="font-display font-black text-lg sm:text-2xl md:text-3xl text-white tracking-wide uppercase">
             ELEGÍ TU RECORRIDO
           </h2>
 
-          <p className="font-body text-xs sm:text-sm md:text-base text-[#eaeaea]/90 leading-relaxed max-w-xl mx-auto line-clamp-2 hidden sm:block landscape:hidden md:landscape:block">
-            Estás parado en el vestíbulo principal. Desde acá podés subir por las escaleras hacia las historias humanas de las víctimas o bajar por el pasillo hacia los sótanos clandestinos. Podés recorrer ambos caminos en el orden que prefieras.
+          <p className="font-body text-xs sm:text-sm md:text-base text-[#eaeaea]/90 leading-relaxed max-w-xl mx-auto px-2">
+            Estás en el vestíbulo principal de la Casa por la Memoria. Podés subir a las escaleras o bajar a los sótanos clandestinos en el orden que prefieras.
           </p>
         </div>
 
         {/* Interactive 2.5D Split Portals (Camino A vs Camino B) - En Celular Rotado (Landscape) se colocan lado a lado */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-2 gap-2 sm:gap-3 md:gap-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-2 gap-3.5 sm:gap-4 md:gap-6 w-full">
           {/* Camino A: Las Escaleras (Historias de Vida) */}
           <div
             onClick={() => onSelectPath('camino_a')}

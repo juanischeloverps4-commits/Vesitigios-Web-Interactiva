@@ -419,12 +419,21 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
         </div>
 
         {/* Institutional Accreditation Footer */}
-        <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono-archive text-white/50 gap-2">
-          <div className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#e53935]" />
-            <span>Casa por la Memoria · Marcelo T. de Alvear 32, Resistencia, Chaco</span>
-          </div>
-          <div>
+        <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm font-mono-archive text-white/60 gap-3">
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Casa+por+la+Memoria,+Marcelo+T.+de+Alvear+32,+Resistencia,+Chaco"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white hover:underline transition-all cursor-pointer group"
+            title="Abrir ubicación de la Casa por la Memoria en Google Maps"
+          >
+            <MapPin className="w-4 h-4 text-[#e53935] group-hover:scale-110 transition-transform shrink-0" />
+            <span className="underline decoration-dotted underline-offset-4 group-hover:decoration-solid">
+              Casa por la Memoria · Marcelo T. de Alvear 32, Resistencia, Chaco
+            </span>
+            <ExternalLink className="w-3.5 h-3.5 text-[#c9b79c] opacity-70 group-hover:opacity-100 shrink-0" />
+          </a>
+          <div className="text-[11px] sm:text-xs text-white/40">
             FADyCC — Universidad Nacional del Nordeste (UNNE) · 2026
           </div>
         </div>

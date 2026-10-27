@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NEGATIONIST_NOISE_COMMENTS } from '../data/vestigiosData';
-import { MessageSquareWarning, Shield, GripVertical } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { audioSystem } from '../utils/audioSystem';
 
 interface NoiseIntroProps {
@@ -84,7 +84,7 @@ const DraggableCommentBubble: React.FC<DraggableCommentBubbleProps> = ({ comment
         transform: `translate3d(${offset.x}px, ${offset.y}px, 0) rotate(${currentRotation}deg)`,
         touchAction: 'none',
       }}
-      className={`absolute select-none min-w-[155px] sm:min-w-[190px] max-w-[185px] sm:max-w-[230px] xl:max-w-[250px] landscape:min-w-[155px] landscape:max-w-[180px] p-2 sm:p-2.5 md:p-3 landscape:p-1.5 rounded-xl bg-[#181615]/95 border shadow-[0_12px_28px_rgba(0,0,0,0.95)] backdrop-blur-md text-left transition-shadow duration-150 pointer-events-auto ${
+      className={`absolute select-none min-w-[210px] sm:min-w-[270px] max-w-[260px] sm:max-w-[340px] xl:max-w-[360px] landscape:min-w-[190px] landscape:max-w-[240px] p-2.5 sm:p-3.5 landscape:p-2 rounded-xl bg-[#181615]/95 border shadow-[0_12px_28px_rgba(0,0,0,0.95)] backdrop-blur-md text-left transition-shadow duration-150 pointer-events-auto ${
         isDragging
           ? 'cursor-grabbing border-amber-400 shadow-[0_15px_40px_rgba(245,158,11,0.5)] scale-105 z-50 ring-2 ring-amber-400'
           : 'cursor-grab border-[#7a1e1e]/85 hover:border-[#e53935] hover:scale-[1.02] z-30'
@@ -93,15 +93,16 @@ const DraggableCommentBubble: React.FC<DraggableCommentBubbleProps> = ({ comment
       }`}
       title="Hacé clic o arrastrá para mover este comentario a cualquier lugar de la pantalla"
     >
-      <div className="flex items-center gap-1.5 mb-1 overflow-hidden">
-        <GripVertical className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#c9b79c]/70 shrink-0" />
-        <MessageSquareWarning className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#e53935] shrink-0" />
-        <span className="text-[9px] sm:text-[10px] font-mono-archive text-[#c9b79c] font-bold truncate">
+      {/* Header con nombre de usuario completo y legible sin recortes ni iconos molestos */}
+      <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-white/10">
+        <span className="text-xs sm:text-sm font-mono-archive text-[#e53935] font-bold">
           {comment.user}
         </span>
-        <span className="ml-auto text-[7.5px] sm:text-[9px] text-white/40 whitespace-nowrap shrink-0 pl-1">{comment.timeAgo}</span>
+        <span className="text-[10px] sm:text-xs text-[#c9b79c]/80 whitespace-nowrap shrink-0 pl-1 font-mono-archive">
+          {comment.timeAgo}
+        </span>
       </div>
-      <p className="text-[10.5px] sm:text-xs landscape:text-[9.5px] font-sans text-[#eaeaea] font-medium leading-snug line-clamp-2 sm:line-clamp-none">
+      <p className="text-xs sm:text-[13.5px] md:text-sm landscape:text-xs font-sans text-[#eaeaea] font-medium leading-snug break-words">
         {comment.text}
       </p>
     </div>
@@ -128,7 +129,7 @@ export const NoiseIntro: React.FC<NoiseIntroProps> = ({
 
   // Configure comments:
   // - Randomized dynamically on each visit: order, timestamps, and position offsets
-  // - Anchored strictly over and around the 'ENTRAR A LA CASA' button (y: 68% - 79%)
+  // - Clustered tightly over and around the 'ENTRAR A LA CASA' button (y: 66% - 78%)
   // - Fully legible usernames and quotes without any text being cut off
   useEffect(() => {
     const generated: ActiveComment[] = [];
@@ -151,30 +152,30 @@ export const NoiseIntro: React.FC<NoiseIntroProps> = ({
       'hace 3 m',
     ];
 
-    // Base disordered anchor positions on mobile overlapping the 'ENTRAR A LA CASA' button
+    // Base disordered anchor positions on mobile clustered overlapping the button
     const mobileAnchorPositions = [
-      { x: 15, y: 69, rotate: -4 },
-      { x: 45, y: 70, rotate: 4 },
-      { x: 25, y: 73, rotate: -2 },
-      { x: 14, y: 76, rotate: 3 },
-      { x: 47, y: 76, rotate: -3 },
-      { x: 29, y: 68, rotate: 2 },
+      { x: 10, y: 68, rotate: -3 },
+      { x: 26, y: 70, rotate: 3 },
+      { x: 12, y: 73, rotate: -2 },
+      { x: 28, y: 75, rotate: 2 },
+      { x: 14, y: 77, rotate: -1 },
+      { x: 22, y: 66, rotate: 2 },
     ];
 
-    // Base disordered anchor positions on desktop/tablet overlapping the button
+    // Base disordered anchor positions on desktop/tablet clustered tightly together overlapping the button
     const desktopAnchorPositions = [
-      { x: 40, y: 71, rotate: -4 },
-      { x: 49, y: 70, rotate: 5 },
-      { x: 34, y: 75, rotate: -3 },
-      { x: 52, y: 75, rotate: 2 },
-      { x: 43, y: 69, rotate: 2 },
-      { x: 55, y: 71, rotate: -5 },
-      { x: 12, y: 74, rotate: -5 },
-      { x: 73, y: 74, rotate: 4 },
-      { x: 8, y: 79, rotate: 3 },
-      { x: 77, y: 79, rotate: -4 },
-      { x: 23, y: 78, rotate: -2 },
-      { x: 65, y: 78, rotate: 3 },
+      { x: 38, y: 69, rotate: -3 },
+      { x: 47, y: 70, rotate: 3 },
+      { x: 33, y: 73, rotate: -2 },
+      { x: 51, y: 73, rotate: 2 },
+      { x: 41, y: 66, rotate: 1 },
+      { x: 45, y: 76, rotate: -2 },
+      { x: 28, y: 70, rotate: -3 },
+      { x: 56, y: 71, rotate: 3 },
+      { x: 30, y: 76, rotate: 2 },
+      { x: 54, y: 76, rotate: -2 },
+      { x: 36, y: 78, rotate: -1 },
+      { x: 48, y: 78, rotate: 2 },
     ];
 
     // Shuffle comments and randomize times & micro-offsets
@@ -186,21 +187,21 @@ export const NoiseIntro: React.FC<NoiseIntroProps> = ({
       const mBase = mobileAnchorPositions[idx % mobileAnchorPositions.length];
       const isVisibleOnMobile = idx < mobileAnchorPositions.length;
 
-      // Small natural random jitter (+/- 1.5% in X, +/- 1% in Y, +/- 2 deg in rotation)
-      const xJitter = (Math.random() - 0.5) * 3;
-      const yJitter = (Math.random() - 0.5) * 2;
-      const rotJitter = Math.round((Math.random() - 0.5) * 4);
+      // Small natural random jitter (+/- 1% in X, +/- 1% in Y, +/- 2 deg in rotation)
+      const xJitter = (Math.random() - 0.5) * 2;
+      const yJitter = (Math.random() - 0.5) * 1.5;
+      const rotJitter = Math.round((Math.random() - 0.5) * 3);
 
       generated.push({
         id: idx,
         text: c.text,
         user: c.user || '@usuario_anonimo',
         timeAgo: shuffledTimestamps[idx % shuffledTimestamps.length],
-        desktopX: Math.max(5, Math.min(80, Math.round(dBase.x + xJitter))),
-        desktopY: Math.max(68, Math.min(80, Math.round(dBase.y + yJitter))),
+        desktopX: Math.max(12, Math.min(68, Math.round(dBase.x + xJitter))),
+        desktopY: Math.max(66, Math.min(80, Math.round(dBase.y + yJitter))),
         desktopRotate: dBase.rotate + rotJitter,
-        mobileX: Math.max(8, Math.min(50, Math.round(mBase.x + xJitter))),
-        mobileY: Math.max(68, Math.min(77, Math.round(mBase.y + yJitter))),
+        mobileX: Math.max(5, Math.min(35, Math.round(mBase.x + xJitter))),
+        mobileY: Math.max(65, Math.min(78, Math.round(mBase.y + yJitter))),
         mobileRotate: mBase.rotate + rotJitter,
         delay: 300 + idx * 200,
         hideOnMobile: !isVisibleOnMobile,

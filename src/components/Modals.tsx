@@ -117,7 +117,7 @@ export const Modals: React.FC<ModalsProps> = ({
             </button>
           </div>
 
-          <div className="space-y-4 text-xs sm:text-sm font-body text-[#eaeaea]/90 leading-relaxed">
+          <div className="space-y-4 text-sm sm:text-base font-body text-[#eaeaea]/90 leading-relaxed">
             <p>
               <strong className="text-white font-sans font-bold">VESTIGIOS</strong> es una experiencia documental que busca acercar la historia real del terrorismo de Estado en el Chaco a los jóvenes de hoy, combatiendo la desinformación y las frases hechas que muchas veces se leen en redes sociales.
             </p>
@@ -129,10 +129,10 @@ export const Modals: React.FC<ModalsProps> = ({
             </p>
 
             <div className="p-4 rounded-lg bg-[#090807] border border-[#7a1e1e]/40 my-3">
-              <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-[#e53935] mb-2">
+              <h4 className="font-sans font-bold text-sm uppercase tracking-wider text-[#e53935] mb-2">
                 Un Ecosistema en 3 Partes:
               </h4>
-              <ul className="text-xs space-y-2 font-mono-archive text-[#c9b79c]">
+              <ul className="text-xs sm:text-sm space-y-2.5 font-mono-archive text-[#c9b79c]">
                 <li>• <strong className="text-white">Instagram (@vestigios_negacionismo):</strong> Videos y carruseles ágiles para desmontar mentiras negacionistas en el celular.</li>
                 <li>• <strong className="text-white">Página Web Interactiva:</strong> Un recorrido guiado en primera persona por la Casa, los testimonios y los sótanos.</li>
                 <li>• <strong className="text-white">Instalación Física:</strong> Una experiencia inmersiva que da vida a las voces de las victimas de la dictadura cívico-militar en
@@ -651,59 +651,70 @@ Argentina a través de una silueta proyectada.</li>
               </div>
             </a>
 
-            <div className="p-4 rounded-xl bg-[#0a0908] border border-white/10 text-xs font-mono-archive space-y-1">
-              <span className="text-white font-bold block mb-1">Sede de la Casa por la Memoria:</span>
-              <p className="text-[#c9b79c]">Marcelo T. de Alvear 32, Resistencia, Chaco.</p>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Casa+por+la+Memoria,+Marcelo+T.+de+Alvear+32,+Resistencia,+Chaco"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 rounded-xl bg-[#0a0908] border border-white/10 hover:border-[#e53935] text-xs font-mono-archive space-y-1 block transition-all group cursor-pointer"
+              title="Abrir ubicación de la Casa por la Memoria en Google Maps"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-white font-bold block mb-1">Sede de la Casa por la Memoria:</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#c9b79c] opacity-60 group-hover:opacity-100" />
+              </div>
+              <p className="text-[#c9b79c] group-hover:text-white underline decoration-dotted">Marcelo T. de Alvear 32, Resistencia, Chaco.</p>
               <p className="text-white/60 text-[11px]">Centro de documentación histórica y visitas guiadas.</p>
-            </div>
+            </a>
           </div>
         </div>
       )}
 
-      {/* 6. Modal: ADVERTENCIA DE AUDIO SENSIBLE - Compacto y centrado en celular horizontal */}
+      {/* 6. Modal: ADVERTENCIA DE AUDIO SENSIBLE - Prominente y legible en computadora y celular */}
       {activeModal === 'sensitive_warning' && (
-        <div className="relative w-full max-w-md landscape:max-w-sm bg-[#121212] border-2 border-[#7a1e1e] rounded-xl p-4 sm:p-8 landscape:p-3 text-[#eaeaea] shadow-2xl z-10 animate-scaleUp my-auto">
+        <div className="relative w-full max-w-xl sm:max-w-2xl landscape:max-w-lg bg-[#121212] border-2 border-[#7a1e1e] rounded-2xl p-5 sm:p-9 landscape:p-4 text-[#eaeaea] shadow-2xl z-10 animate-scaleUp my-auto">
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 landscape:top-2 landscape:right-2 p-1 sm:p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
             title="Cerrar y seguir investigando"
             aria-label="Cerrar modal de advertencia"
           >
-            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
-          <div className="flex items-center gap-2 sm:gap-3 text-[#e53935] mb-2 sm:mb-3 landscape:mb-1.5 pr-6 sm:pr-8">
-            <ShieldAlert className="w-5 h-5 sm:w-8 sm:h-8 landscape:w-5 landscape:h-5 shrink-0 animate-pulse" />
-            <h2 className="font-display font-black text-sm sm:text-lg landscape:text-xs text-white">AVISO DE MATERIAL SENSIBLE</h2>
+          <div className="flex items-center gap-3 text-[#e53935] mb-3 sm:mb-4 landscape:mb-2 pr-8 sm:pr-10">
+            <ShieldAlert className="w-6 h-6 sm:w-9 sm:h-9 text-[#e53935] shrink-0 animate-pulse" />
+            <h2 className="font-display font-black text-base sm:text-xl landscape:text-sm text-white tracking-wide">
+              AVISO DE MATERIAL SENSIBLE
+            </h2>
           </div>
 
-          <p className="text-xs sm:text-sm landscape:text-[10.5px] font-body text-[#eaeaea] leading-relaxed mb-1.5 sm:mb-3 landscape:mb-1">
+          <p className="text-base sm:text-2xl landscape:text-base font-display font-bold text-white leading-snug mb-2 sm:mb-3">
             Estás a punto de ingresar al subsuelo clandestino de la ex Brigada.
           </p>
-          <p className="text-[10px] sm:text-xs landscape:text-[9.5px] text-[#c9b79c] font-mono-archive mb-3 sm:mb-6 landscape:mb-2 leading-relaxed landscape:leading-tight">
+          <p className="text-xs sm:text-base landscape:text-xs text-[#c9b79c] font-mono-archive mb-5 sm:mb-8 landscape:mb-3 leading-relaxed">
             Se escucharán sonidos de época y el acordeón que utilizaban los represores para tapar los gritos durante las torturas. Podés elegir si continuar con audio o silenciado.
           </p>
 
-          <div className="flex flex-col gap-1.5 sm:gap-2.5 landscape:gap-1">
+          <div className="flex flex-col gap-2.5 sm:gap-3.5 landscape:gap-1.5">
             <button
               onClick={() => onConfirmSensitiveAudio(true)}
-              className="w-full py-2 sm:py-3 landscape:py-1.5 px-3 sm:px-4 rounded-lg bg-[#7a1e1e] hover:bg-[#912424] text-white font-sans font-bold text-[10.5px] sm:text-xs landscape:text-[9.5px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+              className="w-full py-3 sm:py-4 landscape:py-2 px-4 sm:px-6 rounded-xl bg-[#7a1e1e] hover:bg-[#912424] text-white font-sans font-bold text-xs sm:text-base landscape:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2.5 shadow-lg cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
             >
-              <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
               <span>Continuar con audio activado</span>
             </button>
 
             <button
               onClick={() => onConfirmSensitiveAudio(false)}
-              className="w-full py-1.5 sm:py-2.5 landscape:py-1 px-3 sm:px-4 rounded-lg bg-[#1f1e1d] hover:bg-[#2c2a28] text-[#c9b79c] hover:text-white font-sans text-[10.5px] sm:text-xs landscape:text-[9.5px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-white/10 cursor-pointer"
+              className="w-full py-2.5 sm:py-3.5 landscape:py-2 px-4 sm:px-6 rounded-xl bg-[#1f1e1d] hover:bg-[#2c2a28] text-[#c9b79c] hover:text-white font-sans font-semibold text-xs sm:text-base landscape:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2.5 border border-white/10 cursor-pointer"
             >
-              <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-[#c9b79c] shrink-0" />
               <span>Continuar con audio desactivado</span>
             </button>
 
             <button
               onClick={onClose}
-              className="w-full py-1 sm:py-2 landscape:py-0.5 px-3 sm:px-4 rounded-lg bg-transparent hover:bg-white/5 text-white/60 hover:text-white font-mono-archive text-[9.5px] sm:text-[11px] landscape:text-[8.5px] tracking-wider transition-all flex items-center justify-center gap-1.5 border border-white/5 hover:border-white/15 mt-0.5 cursor-pointer"
+              className="w-full py-2 sm:py-2.5 px-4 rounded-xl bg-transparent hover:bg-white/5 text-white/60 hover:text-white font-mono-archive text-xs sm:text-sm landscape:text-xs tracking-wider transition-all flex items-center justify-center gap-2 border border-white/5 hover:border-white/15 mt-1 cursor-pointer"
             >
               <span>Cancelar y seguir investigando</span>
             </button>
@@ -770,27 +781,25 @@ Argentina a través de una silueta proyectada.</li>
               )}
 
               {/* Epígrafe visible */}
-              <div className="p-2.5 rounded bg-[#090807] border border-white/10 text-[11px] font-mono-archive text-[#c9b79c] italic space-y-1">
+              <div className="p-3 rounded-lg bg-[#090807] border border-white/10 text-xs sm:text-sm font-mono-archive text-[#c9b79c] italic space-y-1.5">
                 <div>{selectedPiece.caption}</div>
                 {selectedPiece.secondaryCaption && (
-                  <div className="pt-1 border-t border-white/10">{selectedPiece.secondaryCaption}</div>
+                  <div className="pt-1.5 border-t border-white/10">{selectedPiece.secondaryCaption}</div>
                 )}
               </div>
 
-
-
               {/* Highlighted Quote */}
-              <div className="p-4 rounded-lg bg-[#090807] border-l-2 border-[#e53935] italic font-body text-sm md:text-base text-[#eaeaea]">
-                {selectedPiece.quote}
+              <div className="p-4 sm:p-5 rounded-xl bg-[#090807] border-l-4 border-[#e53935] italic font-body text-base sm:text-lg md:text-xl text-[#eaeaea] leading-relaxed">
+                "{selectedPiece.quote}"
               </div>
 
               {/* Full Narrative Text in Accessible Prose */}
-              <div className="text-xs sm:text-sm font-body text-[#eaeaea]/90 leading-relaxed whitespace-pre-line space-y-3">
+              <div className="text-sm sm:text-base md:text-lg font-body text-[#eaeaea]/95 leading-relaxed whitespace-pre-line space-y-3.5">
                 {selectedPiece.fullStory}
               </div>
 
               {/* Explicit Citation of Sources (Points 8, 10, 11) */}
-              <div className="pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono-archive text-[#c9b79c]">
+              <div className="pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm font-mono-archive text-[#c9b79c]">
                 <div className={selectedPiece.showYearInModal === false ? 'sm:col-span-2' : ''}>
                   <span className="text-white/60">{selectedPiece.personLabel || 'Persona'}:</span> {selectedPiece.person}
                 </div>
@@ -804,8 +813,8 @@ Argentina a través de una silueta proyectada.</li>
                     <span className="text-white/60">{selectedPiece.expedienteLabel || 'Expediente judicial'}:</span> {selectedPiece.expediente}
                   </div>
                 )}
-                <div className="sm:col-span-2 text-[11px] text-white/70">
-                  <span className="text-white">{selectedPiece.sourceLabel || 'Citado de Fuentes'}:</span> {selectedPiece.source}
+                <div className="sm:col-span-2 text-xs sm:text-sm text-white/80">
+                  <span className="text-white font-bold">{selectedPiece.sourceLabel || 'Citado de Fuentes'}:</span> {selectedPiece.source}
                 </div>
               </div>
             </div>

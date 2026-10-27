@@ -96,7 +96,7 @@ export const BasementScene: React.FC<BasementSceneProps> = ({
 
   // Atmospheric Header & Warning info
   return (
-    <div className="relative w-full min-h-screen pt-20 pb-28 px-4 md:px-8 flex flex-col items-center select-none space-y-6">
+    <div className="relative w-full min-h-screen pt-20 pb-36 sm:pb-44 px-4 md:px-8 flex flex-col items-center select-none space-y-6">
       {/* Downward Scroll Indicator (Fades out when scrolled) - In front of all boxes with z-50 */}
       {!hasScrolled && (
         <div
