@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SceneId } from '../types';
-import { ArrowUpRight, Footprints, Video, Layers, Compass } from 'lucide-react';
+import { ArrowUpRight, Footprints, Video, Layers, Compass, HelpCircle } from 'lucide-react';
+import { NavigationGuideModal } from './NavigationGuideModal';
 
 interface VestibuleSceneProps {
   onSelectPath: (scene: SceneId) => void;
@@ -25,17 +26,57 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
   completedPaths,
   onHoverInteractive,
 }) => {
+  const [isGuideOpen, setIsGuideOpen] = useState(() => {
+    try {
+      return sessionStorage.getItem('vestigios_guide_dismissed_in_session') !== 'true';
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      const isDismissed = sessionStorage.getItem('vestigios_guide_dismissed_in_session');
+      if (isDismissed !== 'true') {
+        setIsGuideOpen(true);
+      }
+    } catch {
+      setIsGuideOpen(true);
+    }
+  }, []);
+
+  const handleCloseGuide = () => {
+    setIsGuideOpen(false);
+    try {
+      sessionStorage.setItem('vestigios_guide_dismissed_in_session', 'true');
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <div className="relative w-full min-h-screen pt-16 sm:pt-20 md:pt-24 pb-36 sm:pb-44 landscape:pt-16 landscape:pb-36 px-3 sm:px-6 md:px-8 flex flex-col items-center justify-start sm:justify-center select-none overflow-y-auto custom-scrollbar">
+      {/* Modal Guía de Navegación */}
+      <NavigationGuideModal isOpen={isGuideOpen} onClose={handleCloseGuide} />
+
       {/* Unified centered column: Eliminates giant empty gaps on tablets and prevents any vertical clipping */}
       <div className="w-full max-w-3xl lg:max-w-4xl flex flex-col items-center z-20 shrink-0 space-y-3 sm:space-y-4 my-auto landscape:my-2">
         {/* Title & Guide Lead */}
-        <div className="text-center max-w-xl space-y-0.5 shrink-0">
-          <div className="flex flex-wrap items-center justify-center gap-1.5 mb-0.5">
+        <div className="text-center max-w-xl space-y-1 shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-0.5">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[9.5px] sm:text-xs font-mono-archive text-[#c9b79c] shadow-sm">
               <Footprints className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#e53935]" />
               <span>Vestíbulo Central · Punto de Bifurcación</span>
             </div>
+
+            <button
+              onClick={() => setIsGuideOpen(true)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/10 hover:bg-amber-400/20 active:bg-amber-400/30 border border-amber-400/35 text-[9.5px] sm:text-xs font-mono-archive text-amber-300 hover:text-amber-200 transition-colors cursor-pointer shadow-sm active:scale-95"
+              title="Abrir guía de cómo navegar la experiencia"
+            >
+              <HelpCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" />
+              <span>¿Cómo navegar?</span>
+            </button>
           </div>
 
           <h2 className="font-display font-black text-lg sm:text-2xl md:text-3xl text-white tracking-wide uppercase">

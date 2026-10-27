@@ -56,7 +56,7 @@ export const NavigationDock: React.FC<NavigationDockProps> = ({
       {/* Dock Bar con columnas equilibradas: Centrado en max-w-5xl para que NUNCA choque contra el borde derecho ni contra scrollbars */}
       <div className="w-full max-w-5xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3 min-h-[40px] sm:min-h-[44px]">
         {/* 1. Columna Izquierda: Volver */}
-        <div className="pointer-events-auto shrink-0 flex items-center justify-start">
+        <div className="pointer-events-auto flex-1 flex items-center justify-start">
           {currentScene !== 'mural' ? (
             <button
               onClick={() => onNavigate('vestibulo')}
@@ -113,8 +113,8 @@ export const NavigationDock: React.FC<NavigationDockProps> = ({
           )}
         </div>
 
-        {/* 3. Columna Derecha: Botón llamativo para AVANZAR (100% visible, nunca se sale ni se corta) */}
-        <div className="pointer-events-auto shrink-0 flex items-center justify-end">
+        {/* 3. Columna Derecha: Botón para avanzar al sótano únicamente en Escaleras */}
+        <div className="pointer-events-auto flex-1 flex items-center justify-end">
           {/* En Camino A (Escaleras): Avanzar al Sótano */}
           {currentScene === 'camino_a' && (
             <button
@@ -122,43 +122,13 @@ export const NavigationDock: React.FC<NavigationDockProps> = ({
                 window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
-                if (!completedPaths.b) {
-                  onNavigate('camino_b');
-                } else {
-                  onOpenMural();
-                }
+                onNavigate('camino_b');
               }}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-[#b91c1c] via-[#e53935] to-[#f59e0b] hover:from-[#d32f2f] hover:to-[#fbbf24] text-white border-2 border-white/70 text-xs sm:text-xs md:text-sm font-bold tracking-tight sm:tracking-normal backdrop-blur-md shadow-[0_0_25px_rgba(229,57,53,0.95)] flex items-center gap-1.5 sm:gap-2 transition-all transform hover:scale-105 active:scale-95 animate-pulse cursor-pointer whitespace-nowrap shrink-0"
-              onMouseEnter={() => onHoverInteractive(!completedPaths.b ? 'Avanzar al sótano' : 'Ir al Mural Final', true)}
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-[#b91c1c] via-[#e53935] to-[#f59e0b] hover:from-[#d32f2f] hover:to-[#fbbf24] text-white border-2 border-white/70 text-xs sm:text-xs md:text-sm font-bold tracking-tight sm:tracking-normal backdrop-blur-md shadow-[0_0_20px_rgba(229,57,53,0.85)] flex items-center gap-1.5 sm:gap-2 transition-all transform hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+              onMouseEnter={() => onHoverInteractive('Avanzar al sótano', true)}
               onMouseLeave={() => onHoverInteractive('', false)}
             >
-              <span>
-                {!completedPaths.b ? 'Avanzar al sótano' : 'Ir al Mural Final'}
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:translate-x-1 transition-transform shrink-0" />
-            </button>
-          )}
-
-          {/* En Camino B (Sótano): Avanzar a Escaleras */}
-          {currentScene === 'camino_b' && (
-            <button
-              onClick={() => {
-                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-                if (!completedPaths.a) {
-                  onNavigate('camino_a');
-                } else {
-                  onOpenMural();
-                }
-              }}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-[#b91c1c] via-[#e53935] to-[#f59e0b] hover:from-[#d32f2f] hover:to-[#fbbf24] text-white border-2 border-white/70 text-xs sm:text-xs md:text-sm font-bold tracking-tight sm:tracking-normal backdrop-blur-md shadow-[0_0_25px_rgba(229,57,53,0.95)] flex items-center gap-1.5 sm:gap-2 transition-all transform hover:scale-105 active:scale-95 animate-pulse cursor-pointer whitespace-nowrap shrink-0"
-              onMouseEnter={() => onHoverInteractive(!completedPaths.a ? 'Avanzar a escaleras' : 'Ir al Mural Final', true)}
-              onMouseLeave={() => onHoverInteractive('', false)}
-            >
-              <span>
-                {!completedPaths.a ? 'Avanzar a escaleras' : 'Ir al Mural Final'}
-              </span>
+              <span>Avanzar al sótano</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:translate-x-1 transition-transform shrink-0" />
             </button>
           )}
