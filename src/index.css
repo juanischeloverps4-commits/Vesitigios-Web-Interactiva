@@ -5,12 +5,21 @@
   color: #eaeaea;
   background-color: #090807;
   font-synthesis: none;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  :root {
+    font-size: 15px;
+  }
 }
 
 html, body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  font-size: 1rem;
 }
 
 /* Custom Typography Helpers */

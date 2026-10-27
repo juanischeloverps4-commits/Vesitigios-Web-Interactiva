@@ -8,7 +8,7 @@ import { VestigiosLogo } from './VestigiosLogo';
 // CONFIGURACIÓN DEL FORMULARIO DE FEEDBACK
 // Pegá aquí la URL de tu endpoint de Web3Forms, Google Apps Script o Formspree:
 // =========================================================================
-export const FEEDBACK_API_URL = "URL_DE_TU_API_AQUI";
+export const FEEDBACK_API_URL: string = "23d9f417-baac-45a1-9cb1-82d654481471";
 
 interface MuralSceneProps {
   onHoverInteractive: (label: string, isEntering: boolean) => void;
@@ -87,25 +87,35 @@ export const MuralScene: React.FC<MuralSceneProps> = ({ onHoverInteractive }) =>
 
     try {
       if (FEEDBACK_API_URL === "URL_DE_TU_API_AQUI") {
-        // Simulación visual en desarrollo/preview si todavía no se reemplazó la URL del servicio
-        console.info(
-          "Feedback enviado en modo de prueba local. Para recibirlo en tu correo o Google Sheets, colocá tu webhook en FEEDBACK_API_URL dentro de MuralScene.tsx"
-        );
+        // Simulación visual en desarrollo si no se especificó un key
         await new Promise((resolve) => setTimeout(resolve, 800));
         setFeedbackStatus('success');
       } else {
-        // Envío real vía POST con fetch a Web3Forms, Google Apps Script o Formspree
-        const response = await fetch(FEEDBACK_API_URL, {
+        // Reconocer si se ingresó un Access Key de Web3Forms (UUID) o una URL personalizada
+        const isWeb3Key = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(FEEDBACK_API_URL.trim());
+        const endpoint = isWeb3Key ? 'https://api.web3forms.com/submit' : FEEDBACK_API_URL.trim();
+
+        const payload = isWeb3Key
+          ? {
+              access_key: FEEDBACK_API_URL.trim(),
+              name: 'Visitante de la Casa por la Memoria',
+              subject: 'Nuevo testimonio / feedback sobre el recorrido - VESTIGIOS',
+              message: feedbackComment.trim(),
+              from_name: 'Vestigios Web Transmedia',
+            }
+          : {
+              comentario: feedbackComment.trim(),
+              fecha: new Date().toLocaleString('es-AR'),
+              origen: 'Mural Final - Vestigios',
+            };
+
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
-          body: JSON.stringify({
-            comentario: feedbackComment.trim(),
-            fecha: new Date().toLocaleString('es-AR'),
-            origen: 'Mural Final - Vestigios',
-          }),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {

@@ -313,7 +313,7 @@ export const NoiseIntro: React.FC<NoiseIntroProps> = ({
 
           <button
             onClick={handleEnterClick}
-            className="relative px-5 sm:px-9 py-1.5 sm:py-3 landscape:py-1 landscape:px-5 rounded-full bg-[#7a1e1e] hover:bg-[#962222] active:bg-[#e53935] text-white font-sans font-black text-xs sm:text-sm landscape:text-[11px] tracking-widest uppercase transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(229,57,53,0.95),0_0_20px_rgba(255,255,255,0.4)] border-2 border-[#e53935] ring-4 ring-[#e53935]/50 animate-pulse flex items-center justify-center group focus:outline-none cursor-pointer"
+            className="relative px-6 sm:px-10 py-2 sm:py-3.5 landscape:py-1.5 landscape:px-6 rounded-full bg-gradient-to-r from-[#991b1b] via-[#dc2626] to-[#f59e0b] hover:from-[#b91c1c] hover:via-[#ef4444] hover:to-[#fbbf24] text-white font-sans font-black text-xs sm:text-base landscape:text-xs tracking-widest uppercase transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(239,68,68,0.95),0_0_25px_rgba(245,158,11,0.6)] border-2 border-white ring-4 ring-red-500/60 animate-pulse flex items-center justify-center group focus:outline-none cursor-pointer"
             onMouseEnter={() => onHoverInteractive('Entrar', true)}
             onMouseLeave={() => onHoverInteractive('', false)}
             aria-label="Entrar a la Casa por la Memoria"

@@ -260,9 +260,37 @@ class AudioSystem {
     }
   }
 
+  private audioPool: Map<string, HTMLAudioElement> = new Map();
+
+  // Preloads and caches Audio objects for instant playback
+  public preloadAllTracks() {
+    if (typeof window === 'undefined') return;
+    try {
+      Object.values(AUDIO_TRACKS).forEach((url) => {
+        if (!this.audioPool.has(url)) {
+          const a = new Audio(url);
+          a.preload = 'auto';
+          a.loop = true;
+          this.audioPool.set(url, a);
+        }
+      });
+    } catch {}
+  }
+
+  private getPreloadedAudio(trackUrl: string): HTMLAudioElement {
+    let audio = this.audioPool.get(trackUrl);
+    if (!audio) {
+      audio = new Audio(trackUrl);
+      audio.loop = true;
+      audio.preload = 'auto';
+      this.audioPool.set(trackUrl, audio);
+    }
+    return audio;
+  }
+
   /* =========================================================================
    * PRIMARY BACKGROUND MUSIC STREAMER
-   * Loops the authentic WAV tracks and crossfades cleanly
+   * Preloaded, instantaneous start with smooth 500ms crossfade transitions
    * ========================================================================= */
   public playTrack(trackUrl: string) {
     const isActuallyMuted = this.isMuted || !this.isEnabled || this.masterVolume === 0;
@@ -283,55 +311,68 @@ class AudioSystem {
     const effectiveVol = this.isDucked ? this.masterVolume * 0.15 : this.masterVolume;
 
     // If the exact same track is already playing, preserve playback without cutting or restarting
-    // (e.g. going from vestibulo to escaleras with 'segundo menu (onose).wav')
-    if (this.currentTrackUrl === trackUrl && this.currentBgAudio) {
+    if (this.currentTrackUrl === trackUrl && this.currentBgAudio && !this.currentBgAudio.paused) {
       this.currentBgAudio.muted = false;
       this.currentBgAudio.volume = effectiveVol;
-      if (this.currentBgAudio.paused && !this.isMuted && this.isEnabled && effectiveVol > 0) {
-        this.currentBgAudio.play().catch(() => {});
-      }
       return;
     }
 
-    // Smoothly fade out previous track
+    // 1. Smoothly fade out previous track (desvanecimiento suave al salir)
     const oldAudio = this.currentBgAudio;
-    if (oldAudio) {
+    if (oldAudio && oldAudio !== this.audioPool.get(trackUrl)) {
       let curVol = oldAudio.volume;
-      const step = curVol / 6;
-      const fadeTimer = setInterval(() => {
+      const fadeSteps = 12;
+      const step = curVol / fadeSteps;
+      const fadeOutTimer = setInterval(() => {
         curVol = Math.max(0, curVol - step);
         try {
           oldAudio.volume = curVol;
         } catch {}
         if (curVol <= 0.01) {
-          clearInterval(fadeTimer);
+          clearInterval(fadeOutTimer);
           try {
             oldAudio.pause();
-            oldAudio.currentTime = 0;
-            oldAudio.src = '';
           } catch {}
         }
       }, 35);
     }
 
-    // Load and play new track
+    // 2. Obtener pista precargada y realizar fade-in progresivo (0 -> effectiveVol)
     try {
-      const audio = new Audio(trackUrl);
+      const audio = this.getPreloadedAudio(trackUrl);
       audio.loop = true;
-      audio.preload = 'auto';
       audio.muted = false;
-      audio.volume = effectiveVol;
-
+      audio.volume = 0; // Inicia en 0 para entrada cinematográfica
       this.currentBgAudio = audio;
       this.currentTrackUrl = trackUrl;
 
       const playPromise = audio.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          if (!this.hasUnlockedAutoplay) {
-            this.setupAutoplayUnlock();
-          }
-        });
+        playPromise
+          .then(() => {
+            let inVol = 0;
+            const inSteps = 14;
+            const inStep = effectiveVol / inSteps;
+            const fadeInTimer = setInterval(() => {
+              inVol = Math.min(effectiveVol, inVol + inStep);
+              try {
+                if (this.currentBgAudio === audio) {
+                  audio.volume = inVol;
+                }
+              } catch {}
+              if (inVol >= effectiveVol - 0.01) {
+                clearInterval(fadeInTimer);
+                if (this.currentBgAudio === audio) {
+                  audio.volume = effectiveVol;
+                }
+              }
+            }, 35);
+          })
+          .catch(() => {
+            if (!this.hasUnlockedAutoplay) {
+              this.setupAutoplayUnlock();
+            }
+          });
       }
     } catch (e) {
       console.warn('Error loading audio track:', e);

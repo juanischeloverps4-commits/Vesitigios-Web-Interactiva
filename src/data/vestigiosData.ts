@@ -556,7 +556,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     initials: 'SC',
     bio: 'Montaje técnico de proyectores, sensores y sincronización de audio espacial en la sala de exposición.',
     image: '/assets/aistudio/SEBA_8a04cb39.png',
-    instagram: 'https://www.instagram.com/sebbcl__?obrf=aXRvNzl6NW10N3pu',
+    instagram: 'https://www.instagram.com/sebcl_/',
   },
 ];
 

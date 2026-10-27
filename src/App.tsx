@@ -81,6 +81,32 @@ export default function App() {
     analyticsTracker.trackAction(muted ? 'Silenció el audio documental' : 'Activó el audio documental', 'audio');
   };
 
+  // Preload authentic documentary audio tracks and key images for rapid scene loading
+  useEffect(() => {
+    audioSystem.preloadAllTracks();
+
+    const PRELOAD_IMAGES = [
+      'https://i.ibb.co/mVnfsVwW/fachada-3-D-casa-por-la-memoria.jpg',
+      'https://i.ibb.co/GfYwsY6v/SOTANO-MAYOR-SB1-IMAGEN-DE-LA-COMISI-N-PROVINCIAL-POR-LA-MEMORIA.png',
+      'https://i.ibb.co/b5ss7nHh/Inscripci-n-en-la-pared-FIRMEZA-Y-LUZ-COMO-CRISTAL-DE-ROCA-COMISI-N-PROVINCIAL-POR-LA-MEMORIA.png',
+      'https://i.ibb.co/tpt6c5XR/vector-picana-electrica.png',
+      'https://i.ibb.co/JFQM18Dw/vector-caja-electrica.png',
+      'https://i.ibb.co/67vwLggc/vector-fusible.png',
+      '/assets/aistudio/SEBA_8a04cb39.png',
+      '/assets/aistudio/JUANI_a65e27b3.jpeg',
+      '/assets/aistudio/TIAGO_fd1d1e70.jpeg',
+      '/assets/aistudio/MAURO_0e23c1aa.jpeg',
+      '/assets/aistudio/LAILA_b24d19d0.png',
+      '/assets/aistudio/CIELO_9edf063b.jpeg',
+      '/assets/aistudio/LUCAS_bf19a7b5.JPEG',
+    ];
+
+    PRELOAD_IMAGES.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+    });
+  }, []);
+
   // Conmute authentic documentary audio landscapes per scene
   useEffect(() => {
     audioSystem.transitionToScene(currentScene, isMuted);

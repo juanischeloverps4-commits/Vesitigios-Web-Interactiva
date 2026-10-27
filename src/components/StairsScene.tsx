@@ -139,7 +139,7 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                 Testimonios de Vida
               </h3>
 
-              <p className="font-body text-xs text-[#eaeaea]/85 leading-relaxed mb-2.5">
+              <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 leading-relaxed mb-2.5">
                 La solidaridad en cautiverio de Gerardo Delgado y el rescate de Viviana Morel; y la restitución de identidad de Guillermo Martín Amarilla Molfino (Nieto 98).
               </p>
 
@@ -150,11 +150,11 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                   <img src="/assets/aistudio/Delgado_HD_7abc2798.png" alt="Gerardo Delgado" className="inline-block h-7 w-7 rounded-full ring-2 ring-[#7a1e1e] object-cover object-top grayscale" />
                   <img src="/assets/aistudio/AMARILLA_e11dc7ad.png" alt="Guillermo Amarilla" className="inline-block h-7 w-7 rounded-full ring-2 ring-[#7a1e1e] object-cover object-top grayscale" />
                 </div>
-                <span className="text-[10px] font-mono-archive text-[#c9b79c]">Delgado & Morel · Amarilla Molfino</span>
+                <span className="text-xs font-mono-archive text-[#c9b79c]">Delgado & Morel · Amarilla Molfino</span>
               </div>
             </div>
 
-            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-mono-archive text-[#c9b79c] group-hover:text-white">
+            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono-archive text-[#c9b79c] group-hover:text-white">
               <span>Ingresar a los testimonios</span>
               <ChevronRight className="w-4 h-4 text-[#e53935] group-hover:translate-x-1 transition-transform" />
             </div>
@@ -172,7 +172,7 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
           >
             <div>
               <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[10px] font-mono-archive tracking-widest text-[#e53935] uppercase px-2 py-0.5 rounded bg-[#7a1e1e]/20 border border-[#7a1e1e]/40">
+                <span className="text-xs font-mono-archive tracking-widest text-[#e53935] uppercase px-2 py-0.5 rounded bg-[#7a1e1e]/20 border border-[#7a1e1e]/40">
                   TÓPICO 2 · BOTÍN DE GUERRA
                 </span>
                 <Scale className="w-4 h-4 text-[#e53935] group-hover:scale-110 transition-transform" />
@@ -182,7 +182,7 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                 El Saqueo Material
               </h3>
 
-              <p className="font-body text-xs text-[#eaeaea]/85 leading-relaxed mb-2.5 line-clamp-3">
+              <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 leading-relaxed mb-2.5 line-clamp-3">
                 El mito de la "gesta patriótica" contra la realidad del robo: los grupos de tareas robaban cuadros artísticos y muebles de las casas secuestradas para decorar los despachos policiales de la Brigada.
               </p>
 
@@ -224,7 +224,7 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                 Los Legajos Oficiales
               </h3>
 
-              <p className="font-body text-xs text-[#eaeaea]/85 leading-relaxed mb-2.5 line-clamp-3">
+              <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 leading-relaxed mb-2.5 line-clamp-3">
                 Decían ser simples administrativos, pero sus legajos oficiales desclasificados los felicitaban por escrito por su "labor contrasubversiva" en la ex Brigada.
               </p>
 
@@ -234,11 +234,11 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                   <img src="/assets/aistudio/Jose_rodriguez_Valiente_HD_4f998583.png" alt="Rodríguez Valiente" className="inline-block h-7 w-7 rounded-full ring-2 ring-white/30 object-cover object-top grayscale" />
                   <img src="/assets/aistudio/Ramon_Meza_HD_7e8aa7e0.png" alt="Ramón Meza" className="inline-block h-7 w-7 rounded-full ring-2 ring-white/30 object-cover object-[50%_55%] grayscale" />
                 </div>
-                <span className="text-[10px] font-mono-archive text-[#c9b79c]">Rodríguez Valiente · Ramón Meza</span>
+                <span className="text-xs font-mono-archive text-[#c9b79c]">Rodríguez Valiente · Ramón Meza</span>
               </div>
             </div>
 
-            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-mono-archive text-[#c9b79c] group-hover:text-white">
+            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono-archive text-[#c9b79c] group-hover:text-white">
               <span>Ingresar al expediente</span>
               <ChevronRight className="w-4 h-4 text-[#e53935] group-hover:translate-x-1 transition-transform" />
             </div>
@@ -324,22 +324,22 @@ export const StairsScene: React.FC<StairsSceneProps> = ({
                 </div>
 
                 {/* Epígrafe visible */}
-                <div className="text-[10px] font-mono-archive text-[#c9b79c] line-clamp-2 mb-2 italic">
+                <div className="text-xs font-mono-archive text-[#c9b79c] line-clamp-2 mb-2 italic">
                   {piece.caption}
                 </div>
 
                 {/* Text Snippet / Quote */}
                 <div className="space-y-1.5 flex-1">
-                  <h3 className="font-display font-bold text-base text-white group-hover:text-[#c9b79c] transition-colors leading-snug">
+                  <h3 className="font-display font-bold text-base sm:text-lg text-white group-hover:text-[#c9b79c] transition-colors leading-snug">
                     {piece.title}
                   </h3>
-                  <p className="font-body text-xs text-[#eaeaea]/80 line-clamp-2 leading-relaxed">
+                  <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 line-clamp-2 leading-relaxed">
                     {piece.quote}
                   </p>
                 </div>
 
                 {/* Footer CTA */}
-                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono-archive text-[#c9b79c] group-hover:text-white">
+                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono-archive font-bold text-[#c9b79c] group-hover:text-white">
                   <span>Abrir viñeta completa</span>
                   <ChevronRight className="w-4 h-4 text-[#e53935] group-hover:translate-x-1 transition-transform" />
                 </div>

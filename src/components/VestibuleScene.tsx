@@ -42,7 +42,7 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
             ELEGÍ TU RECORRIDO
           </h2>
 
-          <p className="font-body text-[10px] sm:text-xs text-[#eaeaea]/85 leading-relaxed max-w-md mx-auto line-clamp-1 sm:line-clamp-2 hidden sm:block landscape:hidden md:landscape:block">
+          <p className="font-body text-xs sm:text-sm md:text-base text-[#eaeaea]/90 leading-relaxed max-w-xl mx-auto line-clamp-2 hidden sm:block landscape:hidden md:landscape:block">
             Estás parado en el vestíbulo principal. Desde acá podés subir por las escaleras hacia las historias humanas de las víctimas o bajar por el pasillo hacia los sótanos clandestinos. Podés recorrer ambos caminos en el orden que prefieras.
           </p>
         </div>
@@ -81,18 +81,18 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
                 </svg>
               </div>
 
-              <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-white mb-0.5 group-hover:text-[#c9b79c] transition-colors leading-tight">
+              <h3 className="font-display font-black text-sm sm:text-base md:text-lg text-white mb-1 group-hover:text-amber-300 transition-colors leading-tight">
                 Las Escaleras · Historias de Vida
               </h3>
-              <p className="font-body text-[9px] sm:text-xs text-[#eaeaea]/80 leading-relaxed mb-1 line-clamp-1 sm:line-clamp-2 landscape:line-clamp-1 md:landscape:line-clamp-2">
+              <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 leading-normal mb-2 line-clamp-2">
                 Conocé a Sara y Pedro, la restitución de identidad de Guillermo Amarilla Molfino (Nieto 98) y los testimonios de vida.
               </p>
             </div>
 
-            {/* Botón táctil con superposición transparente interactiva */}
-            <div className="mt-0.5 sm:mt-1 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white/5 hover:bg-[#c9b79c]/20 active:bg-[#c9b79c]/30 border border-white/10 hover:border-[#c9b79c]/50 flex items-center justify-between text-[10px] sm:text-xs font-mono-archive text-[#c9b79c] group-hover:text-white transition-all shadow-sm">
+            {/* Botón táctil llamativo y visible */}
+            <div className="mt-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#d97706] to-[#f59e0b] hover:from-[#b45309] hover:to-[#d97706] border-2 border-amber-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-wider transition-all shadow-[0_0_18px_rgba(245,158,11,0.55)] group-hover:scale-[1.02]">
               <span>Continuar a las escaleras</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#c9b79c] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
           </div>
 
@@ -223,25 +223,25 @@ export const VestibuleScene: React.FC<VestibuleSceneProps> = ({
                 </svg>
               </div>
 
-              <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-white mb-0.5 group-hover:text-[#eaeaea] transition-colors leading-tight">
+              <h3 className="font-display font-black text-sm sm:text-base md:text-lg text-white mb-1 group-hover:text-red-300 transition-colors leading-tight">
                 El Pasillo y el Sótano · Arquitectura
               </h3>
-              <p className="font-body text-[9px] sm:text-xs text-[#eaeaea]/80 leading-relaxed mb-1 line-clamp-1 sm:line-clamp-2 landscape:line-clamp-1 md:landscape:line-clamp-2">
+              <p className="font-body text-xs sm:text-sm text-[#eaeaea]/90 leading-normal mb-2 line-clamp-2">
                 Descubrí los sótanos clandestinos (SB1 y SB2) y las frases reales talladas en el concreto rescatadas por el EAAF.
               </p>
             </div>
 
-            {/* Botón táctil con superposición transparente interactiva */}
-            <div className="mt-0.5 sm:mt-1 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white/5 hover:bg-white/15 active:bg-white/20 border border-white/15 hover:border-white/40 flex items-center justify-between text-[10px] sm:text-xs font-mono-archive text-[#eaeaea] group-hover:text-white transition-all shadow-sm">
+            {/* Botón táctil llamativo y visible */}
+            <div className="mt-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#b91c1c] to-[#e53935] hover:from-[#991b1b] hover:to-[#b91c1c] border-2 border-red-300/80 flex items-center justify-between text-xs sm:text-sm font-display font-bold text-white uppercase tracking-wider transition-all shadow-[0_0_18px_rgba(229,57,53,0.55)] group-hover:scale-[1.02]">
               <span>Continuar al sótano</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#eaeaea] group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
           </div>
         </div>
 
         {/* Epígrafe sin espacios vacíos por debajo ni por arriba */}
-        <div className="max-w-md md:max-w-lg w-full py-1 px-3 rounded-lg bg-black/60 border border-white/10 text-center text-[9px] sm:text-[10px] text-[#c9b79c] font-mono-archive shadow-lg shrink-0 hidden sm:block landscape:hidden md:landscape:block">
-          <span className="text-white/60">Epígrafe:</span> Relevamiento de planta baja de la ex Brigada de Investigaciones (Libro "El Golpe"). Escaleras (Camino A) y pasillo central hacia los sótanos tapiados (Camino B).
+        <div className="max-w-md md:max-w-lg w-full py-1.5 px-3.5 rounded-lg bg-black/60 border border-white/10 text-center text-xs sm:text-sm text-[#c9b79c] font-mono-archive shadow-lg shrink-0 hidden sm:block landscape:hidden md:landscape:block">
+          <span className="text-white/70">Epígrafe:</span> Relevamiento de planta baja de la ex Brigada de Investigaciones (Libro "El Golpe"). Escaleras (Camino A) y pasillo central hacia los sótanos tapiados (Camino B).
         </div>
       </div>
     </div>
